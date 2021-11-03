@@ -75,7 +75,7 @@ $date = date('ymd');
             <th width="10%">Harga Jual</th>
             <th width="10%" style=" text-align: center;">Qty</th>
             <th class="font-weight-bold" width="10%">Subtotal HPP</th>
-            <!-- <th width="1%" align="center">Aksi</th> -->
+            <th width="1%" align="center">Aksi</th>
           </tr>
         </thead>
           <?php
@@ -116,7 +116,7 @@ $date = date('ymd');
                   </form>
                 </td>
                 <td class="font-weight-bold" style="background-color : #DCDCDC">Rp. <?= number_format($data->subtotal) ?></td>
-                <!-- <td><a href="action/actionbeli?act=del-cart-pembelian&&data=<?= $data->kode_barang ?>&id=<?= $id ?>" class="fa fa-trash" title="Hapus"></a></td> -->
+                <td><a href="action/actionbeli?act=del-cart-pembelian&&data=<?= $data->kode_barang ?>&id=<?= $id ?>" class="fa fa-trash" title="Hapus"></a></td>
               </tr>
         <?php $no++; } ?>
 

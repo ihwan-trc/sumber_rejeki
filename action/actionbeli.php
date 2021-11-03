@@ -41,8 +41,9 @@
 
                     if ($total==0 ) {
                     $sql = $connect->query("INSERT INTO temp_edit_beli
-                        (`kode_barang`,`beli`,`jual`,`diskon`,`qty`,`subtotal`,nama,barcode,satuan, pot)VALUES 
-                        ('$kode_barang','$harga','$jual','$diskon','$qty','$subtotal', '$nama' ,'$barcode' ,'$satuan' ,'$pot');");
+                        (id,kode_barang,barcode,nama,satuan,beli,jual,diskon,qty,subtotal,pot)
+                        VALUES 
+                        ('$id','$kode_barang','$barcode','$nama','$satuan','$harga','$jual','$diskon','$qty','$subtotal','$pot')");
 	                }else{
 	                	$sql = $connect->query("UPDATE temp_edit_beli SET kode_barang='$kode_barang',barcode='$barcode', nama='$nama', satuan='$satuan', beli='$beli', jual='$jual', diskon='$diskon', qty='$qty', subtotal='$subtotal', pot='$pot' WHERE kode_barang='$kode_barang' ");
 	                }
@@ -118,6 +119,7 @@
             }
             $qty = 1;
             $disc = 0;
+            $pot = 0;
             $id = $_POST['id'];
             $tanggal    = date("y-m-d");
             
@@ -147,9 +149,10 @@
                 }
 
                 if ($total==0 ) {
-                    $sql = $connect->query("INSERT INTO temp_edit_beli(`kode_barang`,`beli`,`jual`,`diskon`,`qty`,`subtotal`,nama,barcode,satuan, pot)
-
-                    VALUES ('$kode12','$hbeli','$hjual','$disc','$qty','$bayar', '$nama' ,'$barcode' ,'$satuan' ,'$harga_dis');");
+                    $sql = $connect->query("INSERT INTO temp_edit_beli
+                        (id,kode_barang,barcode,nama,satuan,beli,jual,diskon,qty,subtotal,pot)
+                        VALUES 
+                        ('$id','$kode12','$barcode','$nama','$satuan','$hbeli','$hjual','$disc','$qty','$sub','$pot')");
                 }else {
                     $update = $qty+$upqty;
                     $query4 = $connect->query("UPDATE temp_edit_beli SET qty='$update', subtotal='$bayar', diskon='$disc' WHERE kode_barang='$kode12' ");
@@ -161,24 +164,24 @@
 	    date_default_timezone_set("Asia/Jakarta");
 
 	    $kode_trans = $_POST['kode_trans'];
-	    $stokbeli = $connect->query("SELECT * FROM detail_beli WHERE id='$kode_trans'");
-		    while ($beli = $stokbeli->fetch_object()) {
-			    $qtybeli = $beli->qty;
-			    $kodebeli = $beli->kode_barang;
+	  //   $stokbeli = $connect->query("SELECT * FROM detail_beli WHERE id='$kode_trans'");
+		 //    while ($beli = $stokbeli->fetch_object()) {
+			//     $qtybeli = $beli->qty;
+			//     $kodebeli = $beli->kode_barang;
 
-	    	$querystok = $connect->query("SELECT * FROM barang WHERE kode='$kodebeli'");
-		    	while ($stokbrg = $querystok->fetch_object()) {
-				    $qtybrg = $stokbrg->stok;
-				    $stok = $qtybrg - $qtybeli;
-				    $queryupstok = $connect->query("UPDATE barang SET stok='$stok' WHERE kode='$kodebeli'");
-				}
-			}
+	  //   	$querystok = $connect->query("SELECT * FROM barang WHERE kode='$kodebeli'");
+		 //    	while ($stokbrg = $querystok->fetch_object()) {
+			// 	    $qtybrg = $stokbrg->stok;
+			// 	    $stok = $qtybrg - $qtybeli;
+			// 	    $queryupstok = $connect->query("UPDATE barang SET stok='$stok' WHERE kode='$kodebeli'");
+			// 	}
+			// }
 		
 			$kode_trans = $_POST['kode_trans'];
-			$res    = $connect->query("SELECT SUM(subtotal) AS total, sum(pot) AS pot FROM temp_edit_beli");
-	    	$ex     = $res->fetch_object();
-
+			$res        = $connect->query("SELECT SUM(subtotal) AS total, sum(pot) AS pot FROM temp_edit_beli");
+	    	$ex         = $res->fetch_object();
 	        $pot        = $ex->pot;
+
 	        $kode_trans = $_POST['kode_trans'];
 	        $tanggal    = date("y-m-d");
 	        $jatuh_tempo= $_POST['jatuh_tempo'];
@@ -199,8 +202,6 @@
 	            $kembalian = 0;
 	        }
 
-    	$query = $connect->query("UPDATE pembelian SET nota='$kode_trans', tgl='$tanggal', jatuh_tempo='$jatuh_tempo', status='$status', total_hbeli='$total', bayar='$bayar_t', kembalian='$kembalian', kasir='$kasir', suplier='$suplier',hutang='$hutang' WHERE id='$kode_trans'");
-
     	$result = $connect->query("SELECT * FROM temp_edit_beli");
 	        while ($data = $result->fetch_object()) {
 		        $kode       = $data->kode_barang;
@@ -211,30 +212,44 @@
 		        $subtotal   = $data->subtotal;
 		        $pot        = $data->pot;
 
-		        $simpan = $connect->query("UPDATE detail_beli SET harga='$harga', diskon='$diskon', qty='$qty', subtotal='$subtotal', pot='$pot' WHERE kode_barang='$kode' AND id='$kode_trans'  ");
-        		
         		$sql4 = $connect->query("SELECT * FROM detail_beli WHERE kode_barang = '$kode' AND id='$kode_trans'");
 	        		while ($data1 = $sql4->fetch_object()) {
 	        			$kdbrg= $data1->kode_barang;
 	            		$qtybli = $data1->qty;
-
-	            		$sqlup=$connect->query("SELECT * FROM barang WHERE kode = '$kdbrg' ");
-		        		while ($data = $sqlup->fetch_object()) {
-		        			$stokbrg = $data->stok;
-		        			$adstok = $stokbrg + $qtybli;
-
-		        			$connect->query("UPDATE barang SET beli='$harga', jual='$jual', stok = '$adstok' WHERE kode = '$kdbrg'");
-		        		}
+                        $idbeli = $data1->id;
+                       //  var_dump($kode);
+                       // var_dump($kdbrg);
 	        		}
+ 
+                    if ($kode == $kdbrg) {
+                        $simpan = $connect->query("UPDATE detail_beli SET harga='$harga', diskon='$diskon', qty='$qty', subtotal='$subtotal', pot='$pot' WHERE kode_barang='$kode' AND id='$kode_trans'  ");
+                    }elseif ($kode != $kdbrg) {
+                        $simpan = $connect->query("INSERT INTO detail_beli
+                        (id,kode_barang,harga,diskon,qty,subtotal,pot)
+                        VALUES 
+                        ('$kode_trans','$kode','$harga','$diskon','$qty','$subtotal','$pot')");
+                    }
+
+                    // $sqlup=$connect->query("SELECT * FROM barang WHERE kode = '$kdbrg' ");
+                    //     while ($data = $sqlup->fetch_object()) {
+                    //      $stokbrg = $data->stok;
+                    //      $adstok = $stokbrg + $qtybli;
+
+                    //      $connect->query("UPDATE barang SET beli='$harga', jual='$jual', stok = '$adstok' WHERE kode = '$kdbrg'");
+                    //     }  
         	}
-		
 
-         $connect->query("DELETE FROM temp_edit_beli");
 
-         if (isset($_POST['simpan'])) {
+                     
+
+		$query = $connect->query("UPDATE pembelian SET nota='$kode_trans', tgl='$tanggal', jatuh_tempo='$jatuh_tempo', status='$status', total_hbeli='$total', bayar='$bayar_t', kembalian='$kembalian', kasir='$kasir', suplier='$suplier',hutang='$hutang' WHERE id='$kode_trans'");
+
+        $connect->query("DELETE FROM temp_edit_beli");
+
+        if (isset($_POST['simpan'])) {
             echo "<meta http-equiv='refresh' content='0; url=../home?p=pembelian&&status=sukses'>";
-         }elseif (isset($_POST['simpan_cetak'])) {
+        }elseif (isset($_POST['simpan_cetak'])) {
             echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans'>";
-         }
+        }
     }
  ?>
