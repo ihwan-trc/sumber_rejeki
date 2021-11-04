@@ -218,6 +218,7 @@
 	            		$qtybli = $data1->qty;
                         $idbeli = $data1->id;
 	        		}
+                
  
                     if ($kode == $kdbrg) {
                         $simpan = $connect->query("UPDATE detail_beli SET harga='$harga', diskon='$diskon', qty='$qty', subtotal='$subtotal', pot='$pot' WHERE kode_barang='$kode' AND id='$kode_trans'  ");
@@ -228,17 +229,12 @@
                         ('$kode_trans','$kode','$harga','$diskon','$qty','$subtotal','$pot')");
                     }
 
-                    // $sql5 = $connect->query("SELECT * FROM detail_beli WHERE NOT EXISTS (SELECT * FROM temp_edit_beli WHERE detail_beli.id = temp_edit_beli.id AND detail_beli.id='$kode_trans')");
-                    $sql5 = $connect->query("SELECT kode_barang FROM detail_beli WHERE id='$kode_trans'");
+
+
+                    $sql5 = $connect->query("SELECT detail_beli.kode_barang FROM detail_beli LEFT JOIN temp_edit_beli ON detail_beli.kode_barang = temp_edit_beli.kode_barang WHERE temp_edit_beli.kode_barang IS NULL");
                     while ($dta = $sql5->fetch_object()) {
-                        $kdbrag= $dta->kode_barang;
-                        // $idtrans= $dta->id;
-                       // var_dump($kdbrag);
-                        // if ($idtrans == $kode_trans) {
-                        //     if ($kdbrag != $kdbrg) {
-                        //         $connect->query("DELETE FROM detail_beli WHERE kode_barang='$kdbrag'");
-                        //     }
-                        // }
+                        $kbarang = $dta->kode_barang;
+                        $qhapus = $connect->query("DELETE FROM detail_beli WHERE kode_barang='$kbarang' AND id='$kode_trans'");
                     }
 
                     // $sqlup=$connect->query("SELECT * FROM barang WHERE kode = '$kdbrg' ");
