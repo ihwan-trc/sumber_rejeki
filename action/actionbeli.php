@@ -217,9 +217,8 @@
 	        			$kdbrg= $data1->kode_barang;
 	            		$qtybli = $data1->qty;
                         $idbeli = $data1->id;
-                       //  var_dump($kode);
-                       // var_dump($kdbrg);
 	        		}
+                
  
                     if ($kode == $kdbrg) {
                         $simpan = $connect->query("UPDATE detail_beli SET harga='$harga', diskon='$diskon', qty='$qty', subtotal='$subtotal', pot='$pot' WHERE kode_barang='$kode' AND id='$kode_trans'  ");
@@ -228,6 +227,13 @@
                         (id,kode_barang,harga,diskon,qty,subtotal,pot)
                         VALUES 
                         ('$kode_trans','$kode','$harga','$diskon','$qty','$subtotal','$pot')");
+                    }
+
+
+                    $sql5 = $connect->query("SELECT detail_beli.kode_barang FROM detail_beli LEFT JOIN temp_edit_beli ON detail_beli.kode_barang = temp_edit_beli.kode_barang WHERE temp_edit_beli.kode_barang IS NULL");
+                    while ($dta = $sql5->fetch_object()) {
+                        $kbarang = $dta->kode_barang;
+                        $qhapus = $connect->query("DELETE FROM detail_beli WHERE kode_barang='$kbarang' AND id='$kode_trans'");
                     }
 
                     // $sqlup=$connect->query("SELECT * FROM barang WHERE kode = '$kdbrg' ");
