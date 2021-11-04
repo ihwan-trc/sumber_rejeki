@@ -217,8 +217,6 @@
 	        			$kdbrg= $data1->kode_barang;
 	            		$qtybli = $data1->qty;
                         $idbeli = $data1->id;
-                       //  var_dump($kode);
-                       // var_dump($kdbrg);
 	        		}
  
                     if ($kode == $kdbrg) {
@@ -228,6 +226,19 @@
                         (id,kode_barang,harga,diskon,qty,subtotal,pot)
                         VALUES 
                         ('$kode_trans','$kode','$harga','$diskon','$qty','$subtotal','$pot')");
+                    }
+
+                    // $sql5 = $connect->query("SELECT * FROM detail_beli WHERE NOT EXISTS (SELECT * FROM temp_edit_beli WHERE detail_beli.id = temp_edit_beli.id AND detail_beli.id='$kode_trans')");
+                    $sql5 = $connect->query("SELECT kode_barang FROM detail_beli WHERE id='$kode_trans'");
+                    while ($dta = $sql5->fetch_object()) {
+                        $kdbrag= $dta->kode_barang;
+                        // $idtrans= $dta->id;
+                       // var_dump($kdbrag);
+                        // if ($idtrans == $kode_trans) {
+                        //     if ($kdbrag != $kdbrg) {
+                        //         $connect->query("DELETE FROM detail_beli WHERE kode_barang='$kdbrag'");
+                        //     }
+                        // }
                     }
 
                     // $sqlup=$connect->query("SELECT * FROM barang WHERE kode = '$kdbrg' ");
@@ -246,10 +257,10 @@
 
         $connect->query("DELETE FROM temp_edit_beli");
 
-        if (isset($_POST['simpan'])) {
-            echo "<meta http-equiv='refresh' content='0; url=../home?p=pembelian&&status=sukses'>";
-        }elseif (isset($_POST['simpan_cetak'])) {
-            echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans'>";
-        }
+        // if (isset($_POST['simpan'])) {
+        //     echo "<meta http-equiv='refresh' content='0; url=../home?p=pembelian&&status=sukses'>";
+        // }elseif (isset($_POST['simpan_cetak'])) {
+        //     echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans'>";
+        // }
     }
  ?>
