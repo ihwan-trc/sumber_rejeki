@@ -4,6 +4,11 @@
 
 //data barang ---------------------------------------------------------------------------------------------------------------------------------------
     if ($_GET['act']=='edit-cart-pembelian'){
+        $result = $connect->query("SELECT * FROM temp_edit_beli");
+        $row_cnt = $result->num_rows;
+        if ($row_cnt != 0) {
+            $connect->query("DELETE FROM temp_edit_beli");
+        }
     	$id = $_POST['id'];
         $suplier = $_POST['suplier'];
         $query=$connect->query("SELECT * FROM detail_beli WHERE id='$id'");
@@ -164,18 +169,18 @@
 	    date_default_timezone_set("Asia/Jakarta");
 
 	    $kode_trans = $_POST['kode_trans'];
-	  //   $stokbeli = $connect->query("SELECT * FROM detail_beli WHERE id='$kode_trans'");
-		 //    while ($beli = $stokbeli->fetch_object()) {
-			//     $qtybeli = $beli->qty;
-			//     $kodebeli = $beli->kode_barang;
+	    $stokbeli = $connect->query("SELECT * FROM detail_beli WHERE id='$kode_trans'");
+		    while ($beli = $stokbeli->fetch_object()) {
+			    $qtybeli = $beli->qty;
+			    $kodebeli = $beli->kode_barang;
 
-	  //   	$querystok = $connect->query("SELECT * FROM barang WHERE kode='$kodebeli'");
-		 //    	while ($stokbrg = $querystok->fetch_object()) {
-			// 	    $qtybrg = $stokbrg->stok;
-			// 	    $stok = $qtybrg - $qtybeli;
-			// 	    $queryupstok = $connect->query("UPDATE barang SET stok='$stok' WHERE kode='$kodebeli'");
-			// 	}
-			// }
+	    	$querystok = $connect->query("SELECT * FROM barang WHERE kode='$kodebeli'");
+		    	while ($stokbrg = $querystok->fetch_object()) {
+				    $qtybrg = $stokbrg->stok;
+				    $stok = $qtybrg - $qtybeli;
+				    $queryupstok = $connect->query("UPDATE barang SET stok='$stok' WHERE kode='$kodebeli'");
+				}
+			}
 		
 			$kode_trans = $_POST['kode_trans'];
 			$res        = $connect->query("SELECT SUM(subtotal) AS total, sum(pot) AS pot FROM temp_edit_beli");
@@ -218,8 +223,6 @@
 	            		$qtybli = $data1->qty;
                         $idbeli = $data1->id;
 	        		}
-                
- 
                     if ($kode == $kdbrg) {
                         $simpan = $connect->query("UPDATE detail_beli SET harga='$harga', diskon='$diskon', qty='$qty', subtotal='$subtotal', pot='$pot' WHERE kode_barang='$kode' AND id='$kode_trans'  ");
                     }elseif ($kode != $kdbrg) {
@@ -229,21 +232,20 @@
                         ('$kode_trans','$kode','$harga','$diskon','$qty','$subtotal','$pot')");
                     }
 
-
+                    $sqlstok = $connect->query("SELECT * FROM detail_beli WHERE kode_barang='$kode' AND id='$kode_trans'");
+                    while ($datastok = $sqlstok->fetch_object()) {
+                        $kdbrgstok= $datastok->kode_barang;
+                        $hbeli = $datastok->harga;
+                        $qtybli = $datastok->qty;
+                        $adstok = $stok + $qtybli;
+                        $upstok = $connect->query("UPDATE barang SET beli='$hbeli',jual='$jual',stok ='$adstok' WHERE kode = '$kdbrgstok'");
+                    } 
 
                     $sql5 = $connect->query("SELECT detail_beli.kode_barang FROM detail_beli LEFT JOIN temp_edit_beli ON detail_beli.kode_barang = temp_edit_beli.kode_barang WHERE temp_edit_beli.kode_barang IS NULL");
                     while ($dta = $sql5->fetch_object()) {
                         $kbarang = $dta->kode_barang;
                         $qhapus = $connect->query("DELETE FROM detail_beli WHERE kode_barang='$kbarang' AND id='$kode_trans'");
-                    }
-
-                    // $sqlup=$connect->query("SELECT * FROM barang WHERE kode = '$kdbrg' ");
-                    //     while ($data = $sqlup->fetch_object()) {
-                    //      $stokbrg = $data->stok;
-                    //      $adstok = $stokbrg + $qtybli;
-
-                    //      $connect->query("UPDATE barang SET beli='$harga', jual='$jual', stok = '$adstok' WHERE kode = '$kdbrg'");
-                    //     }  
+                    }                   
         	}
 
 
@@ -253,10 +255,10 @@
 
         $connect->query("DELETE FROM temp_edit_beli");
 
-        // if (isset($_POST['simpan'])) {
-        //     echo "<meta http-equiv='refresh' content='0; url=../home?p=pembelian&&status=sukses'>";
-        // }elseif (isset($_POST['simpan_cetak'])) {
-        //     echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans'>";
-        // }
+        if (isset($_POST['simpan'])) {
+            echo "<meta http-equiv='refresh' content='0; url=../home?p=pembelian&&status=sukses'>";
+        }elseif (isset($_POST['simpan_cetak'])) {
+            echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans'>";
+        }
     }
  ?>
