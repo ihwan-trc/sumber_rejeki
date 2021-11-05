@@ -230,10 +230,10 @@
             $use = $_SESSION['username'];
             if (isset($_POST['pilih'])) {
                 $kodebarang = $_POST['kode_barang'];
-                $f1o=$connect->query("SELECT * FROM barang WHERE kode='$kodebarang' ");
+                $f1o=$connect->query("SELECT * FROM barang WHERE kode='$kodebarang'");
             }else{
                 $barcode = $_POST['barcode'];
-                $f1o=$connect->query("SELECT * FROM barang WHERE nama='$barcode' OR barcode='$barcode'");
+                $f1o=$connect->query("SELECT * FROM barang WHERE nama like '%".$barcode."%' OR barcode like '%".$barcode."%'");
             }
             $qty = 1;
             $disc = 0;

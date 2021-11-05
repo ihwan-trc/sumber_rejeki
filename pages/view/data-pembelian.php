@@ -71,7 +71,7 @@ if (isset($_GET['status'])) {
                           $hutang = '';
                         }
                         if ($data->jatuh_tempo != "0000-00-00") {
-                          $jatuh_tempo = $data->jatuh_tempo;
+                          $jatuh_tempo = date("d/m/Y",strtotime($data->jatuh_tempo));
                         }else{
                           $jatuh_tempo = "";
                         }
@@ -83,11 +83,11 @@ if (isset($_GET['status'])) {
                           <?= $data->nota ?>
                         </a>
                       </td>
-                      <td><?= $data->tgl ?></td>
+                      <td><?= date("d/m/Y",strtotime($data->tgl)); ?></td>
                       <td>Rp.<?= number_format($data->total_hbeli) ?></td>
                       <td><?= $data->status ?></td>
                       <td class="text-danger"><?= $hutang ?></td>
-                      <td><?= $jatuh_tempo ?></td>
+                      <td><?= $jatuh_tempo; ?></td>
                       <td><?= $data->kasir ?></td>
                       <td><?= $data->suplier ?></td>
                       <td class="text-center">

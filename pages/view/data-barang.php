@@ -82,8 +82,8 @@ if (isset($_GET['status'])) {
                       <td><?= $data->satuan ?></td>
                       <td><?= $data->kategori ?></td>
                       <td><?= $data->suplierid ?></td>
-                      <td><?= $data->beli ?></td>
-                      <td><?= $data->jual ?></td>
+                      <td>Rp.<?= number_format($data->beli) ?></td>
+                      <td>Rp.<?= number_format($data->jual) ?></td>
                       <td><?= $data->stok ?></td>
                       <td class="text-center">
                         <a href="#edit_modal" class="btn btn-info btn-sm" data-toggle="modal" data-id="<?= $data->kode ?>"><span class="fa fa-edit"></span></a>

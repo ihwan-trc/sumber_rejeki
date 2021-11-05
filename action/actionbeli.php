@@ -115,19 +115,20 @@
 
         date_default_timezone_set("Asia/Jakarta");
             $use = $_SESSION['username'];
+            $id         = $_POST['id'];
+            $kodebarang = $_POST['kode_barang'];
+            $qty        = 1;
+            $disc       = 0;
+            $pot        = 0;
+            $tanggal    = date("d-m-Y");
             if (isset($_POST['pilih'])) {
-                $kodebarang = $_POST['kode_barang'];
-                $f1o=$connect->query("SELECT * FROM barang WHERE kode='$kodebarang' ");
+                $f1o=$connect->query("SELECT * FROM barang WHERE kode='$kodebarang'");
             }else{
                 $barcode = $_POST['barcode'];
-                $f1o=$connect->query("SELECT * FROM barang WHERE nama='$barcode' OR barcode='$barcode'");
+                $nama    = $_POST['nama'];
+                $f1o=$connect->query("SELECT * FROM barang WHERE nama='$nama' OR barcode='$barcode='");
             }
-            $qty = 1;
-            $disc = 0;
-            $pot = 0;
-            $id = $_POST['id'];
-            $tanggal    = date("y-m-d");
-            
+
             while($data = $f1o->fetch_object())
             {
                 $kode12  = $data->kode;
@@ -248,9 +249,6 @@
                     }                   
         	}
 
-
-                     
-
 		$query = $connect->query("UPDATE pembelian SET nota='$kode_trans', tgl='$tanggal', jatuh_tempo='$jatuh_tempo', status='$status', total_hbeli='$total', bayar='$bayar_t', kembalian='$kembalian', kasir='$kasir', suplier='$suplier',hutang='$hutang' WHERE id='$kode_trans'");
 
         $connect->query("DELETE FROM temp_edit_beli");
@@ -258,7 +256,7 @@
         if (isset($_POST['simpan'])) {
             echo "<meta http-equiv='refresh' content='0; url=../home?p=pembelian&&status=sukses'>";
         }elseif (isset($_POST['simpan_cetak'])) {
-            echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans'>";
+            echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk_pembelian?kode=$kode_trans'>";
         }
     }
  ?>

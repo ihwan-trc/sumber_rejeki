@@ -75,12 +75,12 @@
 <hr>
 <p align="center" style="height: 15px; font-size: 12px">Terima Kasih</p>
 
-	<!-- <script>
-		window.print();
-	</script> -->
-<!-- <script>
-	document.location.href='../../home?p=form-pembeliann&&status=sukses';
-</script> -->
+<script>
+	window.print();
+</script>
+<script>
+	document.location.href='../../home?p=form-pembelian&&status=sukses';
+</script>
 
 <!-- <p style="font-family: Georgia, serif; font-size: 14px; line-height:  1px;">Buahvita 100ml</p>
 <pre class="isi-struk">12                   12.000                   12.000</pre>

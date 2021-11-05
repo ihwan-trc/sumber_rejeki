@@ -56,7 +56,7 @@ if (isset($_GET['status'])) {
         <table class="font-weight-bold">
           <tr>
             <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">No.Transaksi</td>
-            <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:&nbsp;&nbsp;<?php echo "$kode".$dt->count+1; ?></td>
+            <td class="text-danger" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:&nbsp;&nbsp;<?php echo "$kode".$dt->count+1; ?></td>
           </tr>
           <tr>
             <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">Tanggal</td>
@@ -70,8 +70,7 @@ if (isset($_GET['status'])) {
       </div>
       <div class="border-left-success shadow float-right">
         <div class="card-body">
-          <h6 class="h5 mb-0 font-weight-bold text-danger">Total :&nbsp;&nbsp;&nbsp; Rp. <?= number_format($data->total) ?>,-
-          </h6>
+          <h6 class="h5 mb-0 font-weight-bold text-danger">Total :&nbsp;&nbsp;&nbsp; Rp. <?= number_format($data->total) ?></h6>
         </div>
       </div>
     </div>
@@ -104,7 +103,6 @@ if (isset($_GET['status'])) {
             <th>Satuan</th>
             <th>Harga</th>
             <th width="10%" style=" text-align: center;">Qty</th>
-            <!-- <th width="10%">Disc</th> -->
             <th>Subtotal</th>
             <th width="1%" align="center">Aksi</th>
           </tr>
@@ -121,7 +119,7 @@ if (isset($_GET['status'])) {
                 <td><?= $data->barcode ?></td>
                 <td><?= $data->nama ?></td>
                 <td><?= $data->satuan ?></td>
-                <td>Rp. <?= number_format($data->harga) ?>,-</td>
+                <td>Rp. <?= number_format($data->harga) ?></td>
                 <td align="center">
                   <form action="action/action?act=edit-qty-cart" method="POST" align="center">
                     <input type="hidden" name="kode" value="<?= $data->kode_barang ?>">
@@ -129,7 +127,7 @@ if (isset($_GET['status'])) {
                     <input type="text" min="0" name="qty" class="form-control text-xs text-center" value="<?= $data->qty ?>">
                   </form>
                 </td>
-                <td>Rp. <?= number_format($data->subtotal) ?>,-</td>
+                <td style="background-color : #DCDCDC">Rp. <?= number_format($data->subtotal) ?></td>
                 <td><a href="action/action?act=del-cart-penjualan&&data=<?= $data->kode_barang ?>" class="fa fa-trash"></a></td>
               </tr>
         <?php $no++; } ?>
@@ -141,7 +139,7 @@ if (isset($_GET['status'])) {
           ?>
               <tr >
                 <td colspan='6' style="color : red" align="center"><strong>Total Harga</strong></td>
-                <td  style='color : red'><strong>Rp. <?= number_format($data->total) ?>,-</strong></td>
+                <td  style='color : red'><strong>Rp. <?= number_format($data->total) ?></strong></td>
                 <td></td>
               </tr>
               <tr>

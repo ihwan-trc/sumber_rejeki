@@ -1,30 +1,25 @@
 <?php
-
-if($_SESSION['level']!="Admin" AND $_SESSION['level']!="Kasir" ){
-
-echo "<META HTTP-EQUIV='Refresh'
-CONTENT='0; URL=pages/error/index.html'>";
-}
-$date = date('ymd');
-?>
-
-<?php
-  date_default_timezone_set("Asia/Jakarta");
-  if (isset($_GET['id'])) {
-    $no_transaksi = $_GET['id'];
-    $id = $_GET['id'];
+  if($_SESSION['level']!="Admin" AND $_SESSION['level']!="Kasir" ){
+    echo "<META HTTP-EQUIV='Refresh'
+    CONTENT='0; URL=pages/error/index.html'>";
   }
-  $sqlbeli  = $connect->query("SELECT * FROM Pembelian WHERE id = '$no_transaksi' ");
-  $databeli = $sqlbeli->fetch_object(); 
-  $tgl = $databeli->tgl;
-  $kasir = $databeli->kasir;
-  $suplier = $databeli->suplier;
-  $hutang = $databeli->hutang;
+
+    date_default_timezone_set("Asia/Jakarta");
+    if (isset($_GET['id'])) {
+      $no_transaksi = $_GET['id'];
+      $id = $_GET['id'];
+    }
+    $sqlbeli  = $connect->query("SELECT * FROM Pembelian WHERE id = '$no_transaksi' ");
+    $databeli = $sqlbeli->fetch_object(); 
+    $tgl = $databeli->tgl;
+    $kasir = $databeli->kasir;
+    $suplier = $databeli->suplier;
+    $hutang = $databeli->hutang;
 ?>
 
  <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary text-center">Transaksi Edit Pembelian</h6>
+    <h6 class="m-0 font-weight-bold text-primary text-center">Transaksi Pembelian (Tambah Stok)</h6>
     <div class="row">
       <div class="col-9 mt-1">
         <table class="font-weight-bold">
@@ -45,7 +40,7 @@ $date = date('ymd');
     </div>
     <hr class="border-bottom-primary">
     <div class="mt-4">
-    <form action="action/actionbeli?act=add-cart-pembelian" method="POST" name="form_pembelian">
+    <form method="POST" name="form_pembelian">
       <div class="col-4">
         <div class="input-group">
           <input type="hidden" name="id" value="<?= $no_transaksi; ?>">
@@ -54,13 +49,20 @@ $date = date('ymd');
           <input type="hidden" name="barang-kode">
           <input type="text" name="barcode" class="form-control"  placeholder="Barcode / Nama Barang" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;" autofocus="">
           <span class="input-group-btn">
-            <button type="button" class="btn btn-primary" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 12px" data-toggle="modal" data-target=".bs-example-modal-lg"><span class="fa fa-search"></span></button>
+            <button type="submit" class="btn btn-primary" name="cari" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 12px">
+              <span class="fa fa-search"></span>
+            </button>
           </span>
           </div>
         </div>
       </form>
+
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-sm btn-success font-weight-bold" style="float: right;" data-toggle="modal" data-target=".bs-example-modal-lg">Cari Barang ?</button>
+      </span>
     </div>
   </div>
+
   <div class="card-body">
     <div class="table-responsive">
       <div class="my-2"></div>
@@ -128,9 +130,10 @@ $date = date('ymd');
               <tr >
                 <td colspan='7' style="color : red" align="center"><strong>Total Harga</strong></td>
                 <td  style='color : red'><strong>Rp. <?= number_format($data->total) ?></strong></td>
+                <td></td>
               </tr>
               <tr>
-                <td colspan="8"></td>
+                <td colspan="9"></td>
               </tr>
             </tbody>
           </table>
@@ -173,7 +176,7 @@ $date = date('ymd');
                   <label class="control-label col-md-9"> Jatuh Tempo<span class="required"></span></label>
                   <div class="col-md-12 col-sm-6 col-xs-12">
                     <div class="input-group">
-                      <?php $date  = date('Y-m-01'); ?>
+                      <?php $date  = date('d-m-Y'); ?>
                       <input type="date" class="form-control" name="jatuh_tempo" style="border-top-left-radius :  5px; border-bottom-left-radius :  5px; font-size: 14px;">
                       <span class="input-group-btn">
                         <div  class="btn btn-primary" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 14px"><span class="fa fa-calendar"></span>
@@ -253,7 +256,7 @@ $date = date('ymd');
   </div>
 
 <!-- modal view data barang ------------------------------------------------------------------------------------------- -->
-     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="font-size: 10px">
+     <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="font-size: 10px">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-body">
@@ -284,8 +287,8 @@ $date = date('ymd');
             <td><?= $data->satuan ?></td>
             <td><?= $data->kategori ?></td>
             <td><?= $data->suplierid ?></td>
-            <td>Rp. <?= number_format($data->beli) ?>,-</td>
-            <td>Rp. <?= number_format($data->jual) ?>,-</td>
+            <td>Rp. <?= number_format($data->beli) ?></td>
+            <td>Rp. <?= number_format($data->jual) ?></td>
             <td><?= $data->stok ?></td>
             <td>
               <form action="action/actionbeli?act=add-cart-pembelian" method="POST">
@@ -343,3 +346,42 @@ $date = date('ymd');
         }
     })
 </script>
+
+<?php 
+    if (isset($_POST['cari'])) {
+      $idcari = $_POST['id'];
+      $barcodecari = $_POST['barcode'];
+      $cari=$connect->query("SELECT * FROM barang WHERE nama like '%".$barcodecari."%' OR barcode like '%".$barcodecari."%'");
+      $row_cnt = $cari->num_rows;
+      while($data = $cari->fetch_object()){
+        $kodecari = $data->kode;
+        $barcari = $data->barcode;
+        $namacari = $data->nama;
+
+
+        if ($row_cnt > 1) { ?>
+           <script type="text/javascript">
+            $('#myModal').modal('show');
+           </script>
+          
+        <?php  }elseif ($row_cnt == 1){
+           ?>
+            <form action="action/actionbeli?act=add-cart-pembelian" method="POST" id="formcart">
+              <input type="hidden" name="id" value="<?= $no_transaksi; ?>">
+              <input type="hidden" name="kode_barang" value="<?= $kodecari; ?>">
+              <input type="hidden" name="barcode" value="<?= $barcari; ?>">
+              <input type="hidden" name="nama" value="<?= $namacari; ?>">
+            </form>
+    <?php
+          }else{
+            echo "<script>alert('tidak ada')</script>";
+          }
+      }
+
+      
+    }
+   ?>
+   <script>
+    document.getElementById("formcart").submit();
+   </script>
+
