@@ -254,9 +254,9 @@
         $connect->query("DELETE FROM temp_edit_beli");
 
         if (isset($_POST['simpan'])) {
-            echo "<meta http-equiv='refresh' content='0; url=../home?p=pembelian&&status=sukses'>";
+            echo "<meta http-equiv='refresh' content='0; url=../home?p=pembelian&status=sukses'>";
         }elseif (isset($_POST['simpan_cetak'])) {
-            echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk_pembelian?kode=$kode_trans'>";
+            echo "<meta http-equiv='refresh' content='0; url=../home?p=pembelian&status=sukses&kode=$kode_trans'>";
         }
     }
  ?>

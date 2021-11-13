@@ -7,8 +7,18 @@ echo "<META HTTP-EQUIV='Refresh'
 CONTENT='0; URL=?p=404.php'>";
 }
 
-?>
-<?php
+
+if (isset($_GET['kode'])) { 
+$kode= $_GET['kode'];
+
+  ?>
+  <script>
+  $(document).ready(function(){
+      window.open("pages/view/struk_pembelian?kode=<?= $kode ?>", "_blank"); // will open new tab on document ready
+  });
+</script>
+
+<?php }
 if (isset($_GET['status'])) {
   $get_stat = $_GET['status'];
   if ($get_stat=='sukses') {
@@ -79,7 +89,7 @@ if (isset($_GET['status'])) {
                     <tr>
                       <td width="10px" class="text-center"><?= $no ?></td>
                       <td>
-                        <a href="?p=detail-pembelian&&id=<?= $data->id ?>" title="Detail">
+                        <a href="?p=detail-pembelian&id=<?= $data->id ?>" title="Detail">
                           <?= $data->nota ?>
                         </a>
                       </td>
@@ -92,10 +102,9 @@ if (isset($_GET['status'])) {
                       <td><?= $data->suplier ?></td>
                       <td class="text-center">
                         <div class="row">
-                          <a href="pages/view/struk_pembelian?kode=<?= $data->id ?>" class='btn btn-primary btn-sm'  title="Cetak">
+                          <a href="pages/view/struk_pembelian?kode=<?= $data->id ?>" class='btn btn-primary btn-sm'  title="Cetak" target="blank">
                             <span class='fa fa-print'></span>
                           </a> &nbsp;
-                          <!-- <a href="?p=edit-pembelian&&id=<?= $data->id ?>" class='btn btn-info btn-sm'  title="Edit"><span class='fa fa-edit'></span></a> -->
                           <form action="action/actionbeli?act=edit-cart-pembelian" method="POST" name="form_pembelian">
                             <input type="hidden" name="id" value="<?= $data->id ?>">
                             <input type="hidden" name="suplier" value="<?= $data->suplier ?>">

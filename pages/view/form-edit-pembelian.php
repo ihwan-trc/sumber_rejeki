@@ -41,25 +41,45 @@
     <hr class="border-bottom-primary">
     <div class="mt-4">
     <form method="POST" name="form_pembelian">
-      <div class="col-4">
-        <div class="input-group">
-          <input type="hidden" name="id" value="<?= $no_transaksi; ?>">
-          <input type="hidden" name="qty">
-          <input type="hidden" name="diskon">
-          <input type="hidden" name="barang-kode">
-          <input type="text" name="barcode" class="form-control"  placeholder="Barcode / Nama Barang" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;" autofocus="">
-          <span class="input-group-btn">
-            <button type="submit" class="btn btn-primary" name="cari" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 12px">
-              <span class="fa fa-search"></span>
-            </button>
-          </span>
+      <div class="row">
+        <div class="col-4">
+          <div class="input-group">
+            <input type="hidden" name="id" value="<?= $no_transaksi; ?>">
+            <input type="hidden" name="qty">
+            <input type="hidden" name="diskon">
+            <input type="hidden" name="barang-kode">
+            <input type="text" name="barcode" class="form-control"  placeholder="Barcode / Nama Barang" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;" autofocus="" required>
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-primary" name="cari" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 12px">
+                <span class="fa fa-search"></span>
+              </button>
+            </span>
           </div>
+        </div> 
+        <div class="col-4">
+          <?php 
+          if (isset($_GET['status'])) {
+            $get_stat = $_GET['status'];
+            if ($get_stat== 2) { ?>
+                <div class='alert-warning alert-white' style="">
+                  <span class='icon'><i class='fa fa-times-circle'></i></span>
+                    <small>Data > 1 klik "Data barang"!</small> 
+                </div>
+            <?php }else{ ?>
+                <div class='alert-danger alert-white' style="">
+                  <span class='icon'><i class='fa fa-times-circle'></i></span>
+                    <small>Data tidak ditemukan!</small> 
+                </div>
+            <?php } 
+          } ?>
+        </div>  
+        <div class="col-4">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-sm btn-success font-weight-bold" style="float: right;" data-toggle="modal" data-target=".bs-example-modal-lg">Data Barang</button>
+          </span>
         </div>
-      </form>
-
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-sm btn-success font-weight-bold" style="float: right;" data-toggle="modal" data-target=".bs-example-modal-lg">Cari Barang ?</button>
-      </span>
+      </div>
+    </form>
     </div>
   </div>
 
@@ -118,7 +138,7 @@
                   </form>
                 </td>
                 <td class="font-weight-bold" style="background-color : #DCDCDC">Rp. <?= number_format($data->subtotal) ?></td>
-                <td><a href="action/actionbeli?act=del-cart-pembelian&&data=<?= $data->kode_barang ?>&id=<?= $id ?>" class="fa fa-trash" title="Hapus"></a></td>
+                <td><a href="action/actionbeli?act=del-cart-pembelian&data=<?= $data->kode_barang ?>&id=<?= $id ?>" class="fa fa-trash" title="Hapus"></a></td>
               </tr>
         <?php $no++; } ?>
 
@@ -256,7 +276,7 @@
   </div>
 
 <!-- modal view data barang ------------------------------------------------------------------------------------------- -->
-     <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="font-size: 10px">
+     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="font-size: 10px">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-body">
@@ -353,35 +373,25 @@
       $barcodecari = $_POST['barcode'];
       $cari=$connect->query("SELECT * FROM barang WHERE nama like '%".$barcodecari."%' OR barcode like '%".$barcodecari."%'");
       $row_cnt = $cari->num_rows;
-      while($data = $cari->fetch_object()){
-        $kodecari = $data->kode;
-        $barcari = $data->barcode;
-        $namacari = $data->nama;
-
-
-        if ($row_cnt > 1) { ?>
-           <script type="text/javascript">
-            $('#myModal').modal('show');
-           </script>
-          
-        <?php  }elseif ($row_cnt == 1){
-           ?>
+      
+        if ($row_cnt == 1){
+          while($data = $cari->fetch_object()){
+              $kodecari = $data->kode;
+              $barcari = $data->barcode;
+              $namacari = $data->nama; ?>
             <form action="action/actionbeli?act=add-cart-pembelian" method="POST" id="formcart">
               <input type="hidden" name="id" value="<?= $no_transaksi; ?>">
               <input type="hidden" name="kode_barang" value="<?= $kodecari; ?>">
               <input type="hidden" name="barcode" value="<?= $barcari; ?>">
               <input type="hidden" name="nama" value="<?= $namacari; ?>">
-            </form>
-    <?php
-          }else{
-            echo "<script>alert('tidak ada')</script>";
-          }
-      }
-
-      
+            </form> <?php }
+        }elseif ($row_cnt > 1){
+            echo "<meta http-equiv='refresh' content='0; url=home?p=form-edit-pembelian&id=$no_transaksi&status=2'>";
+        }elseif($row_cnt < 1){
+            echo "<meta http-equiv='refresh' content='0; url=home?p=form-edit-pembelian&id=$no_transaksi&status=3'>";
+        }
     }
    ?>
    <script>
     document.getElementById("formcart").submit();
    </script>
-

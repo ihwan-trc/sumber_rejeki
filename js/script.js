@@ -24,6 +24,12 @@ $('#clicksift').on('click',  function () {
     $('#data-shift').removeClass('sembunyikan');
 });
 
+$(document).ready(function() {
+     var table = $('#list-jual').DataTable( { 
+        
+     });
+ });
+
 
 //data barang ----------------------------------------------------------------------------------------------------
  // $(document).ready(function() {
