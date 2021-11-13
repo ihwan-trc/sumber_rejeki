@@ -64,25 +64,6 @@ if (isset($_GET['status'])) {
           </tr>
         </table>
       </div>
-      <!-- <div class="float-right">
-        <table class="font-weight-bold">
-          <tr>
-            <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">Supplier</td>
-            <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:
-              <select class="" style="font-size: 12px"> -->
-                <?php
-                  // $res = $connect->query('SELECT * FROM suplier'); 
-                  // while ($data = $res->fetch_object()) {
-                   ?>
-                    <!-- <option value="<?= $data->nama ?>"><?= $data->nama ?></option> -->
-                <?php
-                 // }
-                  ?> 
-              <!-- </select>
-            </td>
-          </tr>
-        </table>
-      </div> -->
     </div>
     <hr class="border-bottom-primary">
     <div class="mt-4">

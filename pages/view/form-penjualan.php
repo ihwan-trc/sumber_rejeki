@@ -76,19 +76,46 @@ if (isset($_GET['status'])) {
     </div>
     <hr class="border-bottom-primary">
     <div class="mt-4">
-    <form action="action/action?act=add-cart-penjualan" method="POST" name="form_penjualan">
-      <div class="col-4">
-        <div class="input-group">
-          <input type="hidden" name="qty">
-          <input type="hidden" name="diskon">
-          <input type="hidden" name="barang-kode">
-          <input type="text" name="barcode" class="form-control"  placeholder="Barcode / Nama Barang" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;" autofocus="">
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-primary" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 12px" data-toggle="modal" data-target=".bs-example-modal-lg"><span class="fa fa-search"></span></button>
-          </span>
+    <form method="POST" name="form_penjualan">
+      <div class="row">
+        <div class="col-4">
+          <div class="input-group">
+            <input type="hidden" name="id" value="<?= $no_transaksi; ?>">
+            <input type="hidden" name="qty">
+            <input type="hidden" name="diskon">
+            <input type="hidden" name="barang-kode">
+            <input type="text" name="barcode" class="form-control"  placeholder="Barcode / Nama Barang" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;" autofocus="" required>
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-primary" name="cari" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 12px">
+                <span class="fa fa-search"></span>
+              </button>
+            </span>
           </div>
+        </div> 
+        <div class="col-4">
+          <?php 
+          if (isset($_GET['status'])) {
+            $get_stat = $_GET['status'];
+            if ($get_stat== 2) { ?>
+                <div class='alert-warning alert-white' style="">
+                  <span class='icon'><i class='fa fa-times-circle'></i></span>
+                    <small>Data > 1 klik "Data barang"!</small> 
+                </div>
+            <?php }elseif ($get_stat== 3){ ?>
+                <div class='alert-danger alert-white' style="">
+                  <span class='icon'><i class='fa fa-times-circle'></i></span>
+                    <small>Data tidak ditemukan!</small> 
+                </div>
+            <?php } 
+          } ?>
+        </div>  
+        <div class="col-4">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-sm btn-success font-weight-bold" style="float: right;" data-toggle="modal" data-target=".bs-example-modal-lg">Data Barang</button>
+          </span>
         </div>
-      </form>
+      </div>
+    </form>
     </div>
   </div>
   <div class="card-body">
@@ -282,4 +309,33 @@ $('#input-bayar').on('keypress', function(e) {
         </div>
       </div>
     </div>
-<!-- end view data barang --------------------------------------------------------------------------------------------- -->
+<!-- end view data barang -->
+
+<?php 
+    if (isset($_POST['cari'])) {
+      $idcari = $_POST['id'];
+      $barcodecari = $_POST['barcode'];
+      $cari=$connect->query("SELECT * FROM barang WHERE nama like '%".$barcodecari."%' OR barcode like '%".$barcodecari."%'");
+      $row_cnt = $cari->num_rows;
+      
+        if ($row_cnt == 1){
+          while($data = $cari->fetch_object()){
+              $kodecari = $data->kode;
+              $barcari = $data->barcode;
+              $namacari = $data->nama; ?>
+            <form action="action/action?act=add-cart-penjualan" method="POST" id="formcart">
+              <input type="hidden" name="id" value="<?= $no_transaksi; ?>">
+              <input type="hidden" name="kode_barang" value="<?= $kodecari; ?>">
+              <input type="hidden" name="barcode" value="<?= $barcari; ?>">
+              <input type="hidden" name="nama" value="<?= $namacari; ?>">
+            </form> <?php }
+        }elseif ($row_cnt > 1){
+            echo "<meta http-equiv='refresh' content='0; url=home?p=form-penjualan&status=2'>";
+        }elseif($row_cnt < 1){
+            echo "<meta http-equiv='refresh' content='0; url=home?p=form-penjualan&status=3'>";
+        }
+    }
+   ?>
+   <script>
+    document.getElementById("formcart").submit();
+   </script>

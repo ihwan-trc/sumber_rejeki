@@ -115,7 +115,6 @@ if (isset($_GET['status'])) {
                             <input type="hidden" name="id" value="<?= $data->id ?>">
                             <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><span class="fa fa-trash"></span></button>
                           </form>
-                            
                         </div>
                       </td>
                     </tr>

@@ -66,18 +66,37 @@ if (isset($_GET['status'])) {
                     ?>
                     <tr>
                       <td width="10px" class="text-center"><?= $no ?></td>
-                      <td><?= $data->id ?></td>
-                      <td><?= $data->tgl ?></td>
-                      <td><?= $data->total_harga ?></td>
-                      <td><?= $data->total_bayar ?></td>
-                      <td><?= $data->kembali ?></td>
+                      <td>
+                        <a href="?p=detail-penjualan&id=<?= $data->id ?>" title="Detail">
+                          <?= $data->id ?>
+                        </a>
+                      </td>
+                      <td><?= date("d/m/Y",strtotime($data->tgl)); ?></td>
+                      <td><?= number_format($data->total_harga) ?></td>
+                      <td><?= number_format($data->total_bayar) ?></td>
+                      <td><?= number_format($data->kembali) ?></td>
                       <td><?= $data->kasir ?></td>
                       <td class="text-center">
-                        <a href="?p=detail-penjualan&&id=<?= $data->id ?>" class='btn btn-info btn-sm'  title="Detail"><span class='fa fa-eye'></span></a>
+                        <div class="row">
+                          <a href="pages/view/struk_penjualan?kode=<?= $data->id ?>" class='btn btn-primary btn-sm'  title="Cetak" target="blank">
+                            <span class='fa fa-print'></span>
+                          </a> &nbsp;
+                          <form action="action/actionjual?act=edit-cart-penjualan" method="POST" name="form_penjualan">
+                            <input type="hidden" name="id" value="<?= $data->id ?>">
+                            <input type="hidden" name="suplier" value="<?= $data->suplier ?>">
+                            <button type="submit" class="btn btn-sm btn-info" title="Edit"><span class="fa fa-edit"></span></button>
+                          </form> &nbsp;
+
+                          <form action="action/action?act=delete-penjualan" method="POST" name="form_penjualan">
+                            <input type="hidden" name="id" value="<?= $data->id ?>">
+                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><span class="fa fa-trash"></span></button>
+                          </form>
+                        </div>
+                        <!-- <a href="?p=detail-penjualan&&id=<?= $data->id ?>" class='btn btn-info btn-sm'  title="Detail"><span class='fa fa-eye'></span></a>
                           
                         <a href="pages/view/struk?kode=<?= $data->id ?>" class='btn btn-primary btn-sm'  title="Cetak">
                           <span class='fa fa-print'></span>
-                        </a>
+                        </a> -->
                       </td>
                     </tr>
                   <?php $no++; } ?>
