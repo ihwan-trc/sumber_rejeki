@@ -23,7 +23,7 @@
         $stok1         = str_replace(".", "", $stok);
 
         $sql = $connect->query("INSERT INTO barang (kode, barcode, nama, suplierid, kategori, satuan, beli, jual , expired, stok, status, edit)
-            VALUES ('$kode','$barcode','$nama','$suplier','$kat','$sat','$harga_beli','$harga_jual','$expire','$stok1','aktif','tutup')");
+            VALUES ('$kode','$barcode','$nama','$suplier','$kat','$sat','$harga_beli','$harga_jual','$expire','$stok1','aktif','buka')");
         if ($sql) {
             header("location:../home?p=barang&&status=sukses");
         }else
@@ -43,8 +43,8 @@
         $jual    = $_POST['hjual'];
         $expire  = $_POST['expired'];
         $stok    = $_POST['stok'];
-        $status  = $_POST['status'];
-        $edit    = $_POST['edit'];
+        $status  = 'aktif';
+        $edit    = 'buka';
 
         $harga_beli    = str_replace(".", "", $beli);
         $harga_jual    = str_replace(".", "", $jual);
@@ -96,20 +96,18 @@
     }elseif($_GET['act']=='del-barang'){
 
         $kode = $_GET['kode'];
+        $query1=$connect->query("SELECT * FROM detail WHERE kode_barang='$kode'");
+        $num1 = mysqli_num_rows($query1);
+        $query2=$connect->query("SELECT * FROM detail_beli WHERE kode_barang='$kode'");
+        $num2 = mysqli_num_rows($query2);
 
-        $sql = $connect->query("DELETE FROM barang WHERE kode = '$kode'");
-        if ($sql) {
-
-          header("location:../home?p=barang&&status=sukses");
-
-
-        }else
-
-        $connect->query("UPDATE barang SET status = 'tidak' WHERE kode='$kode' ");
-
+        if ($num1 != NULL || $num2 != NULL) {
+            echo "<script type='text/javascript'>alert('Data sudah digunakan dalam transaksi tidak bisa dihapus')</script>";
+            echo "<script>document.location.href='../home?p=barang';</script>";
+        }else{
+             $sql = $connect->query("DELETE FROM barang WHERE kode = '$kode'");
             header("location:../home?p=barang&&status=sukses");
-
-
+        }
 
     }elseif($_GET['act']=='add-sup'){
 
@@ -146,13 +144,18 @@
     }elseif ($_GET['act']=='del-sup') {
 
         $kode = $_GET['kode'];
-
-        $sql = $connect->query("DELETE FROM suplier WHERE kode = '$kode'");
-
-        if ($sql) {
-            header("location:../home?p=suplier&&status=sukses");
-        }else{
-            header("location:../home?p=suplier&&status=gagal");
+        $query1=$connect->query("SELECT * FROM suplier WHERE kode='$kode'");
+        while($data = $query1->fetch_object()){
+            $nama = $data->nama;
+            $query2=$connect->query("SELECT * FROM pembelian WHERE suplier='$nama'");
+            $num = mysqli_num_rows($query2);
+            if ($num != NULL) {
+            echo "<script type='text/javascript'>alert('Data sudah digunakan dalam transaksi tidak bisa dihapus')</script>";
+            echo "<script>document.location.href='../home?p=suplier';</script>";
+            }else{
+                $sql = $connect->query("DELETE FROM suplier WHERE kode = '$kode'");
+                header("location:../home?p=suplier&&status=sukses");
+            }
         }
 
     }elseif($_GET['act']=='add-kategori'){
@@ -263,12 +266,8 @@
                     @$harga_dis = (($sub*$disc)/100);
                     $bayar      = $sub-$harga_dis;
                 }
-            
-           // $updatestok = $stok-$qty;
-           // $query5 = $connect->query("UPDATE data_barang SET stok='$updatestok' WHERE kode='$kode12'");
 
-            if ($qty<=$stok) {
-                 # code...
+            // if ($qty<=$stok) {
                 if ($total==0 ) {
                     $sql = $connect->query("INSERT INTO temp(`kode_barang`,`harga`,`diskon`,`qty`,`subtotal`,nama,barcode,satuan, pot)
 
@@ -277,14 +276,12 @@
                     $update = $qty+$upqty;
                     $query4 = $connect->query("UPDATE temp SET qty='$update', subtotal='$bayar', diskon='$disc' WHERE kode_barang='$kode12' ");
                 }
-            }else{
-                echo "<script type='text/javascript'>alert('Stok Tidak Cukup')</script>";
-            }
+            // }else{
+            //     echo "<script type='text/javascript'>alert('Stok Tidak Cukup')</script>";
+            // }
 
             }
             echo "<script>document.location.href='../home?p=form-penjualan';</script>";
-
-
 
     }elseif ($_GET['act']=='edit-qty-cart') {
 
@@ -334,16 +331,31 @@
         $pot        = $ex->pot;
         $kode_trans = $_POST['kode_trans'];
         $tanggal    = date("y-m-d");
+        $jatuh_tempo= $_POST['jatuh_tempo'];
+        $status     = $_POST['status'];
         $total1     = $_POST['input_total'];
         $total      = str_replace(".", "", $total1);
         $bayar      = $_POST['input_bayar'];
         $bayar_t    = str_replace(".", "", $bayar);
         $kem        = $_POST['input_kembali'];
         $kembali    = $bayar_t-$total;
+        $kasir      = $_POST['created'];
+        $customer_post   = $_POST['customer'];
+        if ($customer_post == "" ) {
+            $customer = "Umum";
+        }else{
+            $customer = $customer_post;
+        }
+        if ($status == 'Lunas') {
+            $hutang = 0;
+            $kembalian = $kembali;
+        }elseif ($status == 'Belum Lunas') {
+            $hutang = $kembali;
+            $kembalian = 0;
+        }
 
-    $query = $connect->query("INSERT INTO penjualan (id, customer, tgl, total_harga, total_bayar, kembali, diskon, kasir)
-
-         VALUES ('$kode_trans','-','$tanggal','$total','$bayar_t','$kembali','$pot', '$user')");
+    $query = $connect->query("INSERT INTO penjualan (id, customer, tgl, jatuh_tempo, status, total_harga, total_bayar, kembali, kasir, hutang)
+         VALUES ('$kode_trans','$customer','$tanggal','$jatuh_tempo','$status','$total','$bayar_t','$kembalian','$kasir','$hutang')");
 
       $result = $connect->query("SELECT * FROM temp");
 
@@ -377,6 +389,27 @@
          }elseif (isset($_POST['simpan_cetak'])) {
             echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans'>";
          }
+
+    }elseif ($_GET['act']=='delete-penjualan') {
+        $kode_trans = $_POST['id'];
+        $query = $connect->query("SELECT * FROM detail WHERE id='$kode_trans'");
+        while ($data1 = $query->fetch_object()) {
+            $kode = $data1->kode_barang;
+            $stokbeli = $data1->qty;
+
+            $query2 = $connect->query("SELECT * FROM barang WHERE kode='$kode'");
+            while ($data = $query2->fetch_object()) {
+                $kode2 = $data->kode;
+                $stok = $data->stok;
+                $stokup = $stok + $stokbeli;
+
+                $update = $connect->query("UPDATE barang SET stok = '$stokup' WHERE kode = '$kode2'");
+            }
+        }
+
+        $sql = $connect->query("DELETE FROM penjualan WHERE id = '$kode_trans'");
+        $sql2 = $connect->query("DELETE FROM detail WHERE id = '$kode_trans'");
+        echo "<meta http-equiv='refresh' content='0; url=../home?p=penjualan&&status=sukses'>";
 
   // ====================================pembelian=========================
 

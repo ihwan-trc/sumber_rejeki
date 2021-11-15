@@ -63,8 +63,8 @@ if (isset($_GET['status'])) {
                       <td align=center>BP-0$data->kode</td>
                       <td align=center>$data->nama</td>
                       <td align=center>
-                        <a href='action/action.php?kode=$data->kode&&act=del-kategori' class='btn btn-danger btn-sm'><span class='fa fa-trash'> hapus</span></a>
-                        <a href='?p=kategori&&kode=$data->kode' class='btn btn-primary btn-sm'><span class='fa fa-edit'> ubah</span></button>
+                        <a href='?p=kategori&&kode=$data->kode' class='btn btn-info btn-sm' title='edit'><span class='fa fa-edit'></span></a>
+                        <a href='action/action.php?kode=$data->kode&&act=del-kategori' class='btn btn-danger btn-sm' title='hapus'><span class='fa fa-trash'></span></a>
                       </td>
                     </tr>";
                     $no++;

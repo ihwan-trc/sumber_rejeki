@@ -1,77 +1,41 @@
 <?php
+  if($_SESSION['level']!="Admin" AND $_SESSION['level']!="Kasir" ){
+    echo "<META HTTP-EQUIV='Refresh'
+    CONTENT='0; URL=pages/error/index.html'>";
+  }
 
-if($_SESSION['level']!="Admin" AND $_SESSION['level']!="Kasir" ){
-
-echo "<META HTTP-EQUIV='Refresh'
-CONTENT='0; URL=pages/error/index.html'>";
-}
-$date = date('ymd');
-
-?>
-<?php
-if (isset($_GET['status'])) {
-  $get_stat = $_GET['status'];
-  if ($get_stat=='sukses') {
-    echo '    <div class="alert alert-success alert-white rounded">
-        <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-        <div class="icon">
-            <i class="fa fa-check"></i>
-        </div>
-        <strong>Transaksi Berhasil!</strong> 
-    </div>';
-  
-  }elseif ($get_stat=='gagal') {
-    echo '    <div class="alert alert-danger alert-white rounded">
-        <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-        <div class="icon">
-            <i class="fa fa-times-circle"></i>
-        </div>
-        <strong>Gagal!</strong> 
-        
-    </div>    
-';
-  } 
-
-} ?>
-<?php
-  date_default_timezone_set("Asia/Jakarta");
-  $sql = $connect->query("SELECT COUNT(id) AS count FROM Penjualan WHERE tgl = '". date('Y-m-d') ."' ");
-  $dt  = $sql->fetch_object();
-  $kode = date('ymhis');
-
-  $user = $_SESSION['username'];
-  $sql  = $connect->query("SELECT * FROM user WHERE username = '$user' ");
-  $data = $sql->fetch_object(); 
-  $nama = $data->nama;
-
-  $result = $connect->query("SELECT SUM(subtotal) AS total FROM temp");
-  $data   = $result->fetch_object();
+    date_default_timezone_set("Asia/Jakarta");
+    if (isset($_GET['id'])) {
+      $no_transaksi = $_GET['id'];
+      $id = $_GET['id'];
+    }
+    $sqlbeli  = $connect->query("SELECT * FROM penjualan WHERE id = '$no_transaksi' ");
+    $databeli = $sqlbeli->fetch_object(); 
+    $tgl = $databeli->tgl;
+    $kasir = $databeli->kasir;
+    $customer = $databeli->customer;
+    $hutang = $databeli->hutang;
 ?>
 
  <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary text-center">Transaksi Penjualan</h6>
+    <h6 class="m-0 font-weight-bold text-primary text-center">Transaksi penjualan</h6>
     <div class="row">
       <div class="col-9 mt-1">
         <table class="font-weight-bold">
           <tr>
             <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">No.Transaksi</td>
-            <td class="text-danger" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:&nbsp;&nbsp;<?php echo "$kode".$dt->count+1; ?></td>
+            <td class="text-danger" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:&nbsp;&nbsp;<?= $no_transaksi; ?></td>
           </tr>
           <tr>
             <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">Tanggal</td>
-            <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:&nbsp;&nbsp;<?= date('d/m/Y')?></td>
+            <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:&nbsp;&nbsp;<?= $tgl?></td>
           </tr>
           <tr>
             <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">Kasir</td>
-            <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:&nbsp;&nbsp;<?= $nama ?></td>
+            <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:&nbsp;&nbsp;<?= $kasir ?></td>
           </tr>
         </table>
-      </div>
-      <div class="border-left-success shadow float-right">
-        <div class="card-body">
-          <h6 class="h5 mb-0 font-weight-bold text-danger">Total :&nbsp;Rp.<?= number_format($data->total) ?></h6>
-        </div>
       </div>
     </div>
     <hr class="border-bottom-primary">
@@ -101,7 +65,7 @@ if (isset($_GET['status'])) {
                   <span class='icon'><i class='fa fa-times-circle'></i></span>
                     <small>Data > 1 klik "Data barang"!</small> 
                 </div>
-            <?php }elseif ($get_stat== 3){ ?>
+            <?php }else{ ?>
                 <div class='alert-danger alert-white' style="">
                   <span class='icon'><i class='fa fa-times-circle'></i></span>
                     <small>Data tidak ditemukan!</small> 
@@ -118,6 +82,7 @@ if (isset($_GET['status'])) {
     </form>
     </div>
   </div>
+
   <div class="card-body">
     <div class="table-responsive">
       <div class="my-2"></div>
@@ -128,15 +93,15 @@ if (isset($_GET['status'])) {
             <th>Barcode</th>
             <th>Nama Barang</th>
             <th>Satuan</th>
-            <th>Harga</th>
+            <th width="10%">Harga</th>
             <th width="10%" style=" text-align: center;">Qty</th>
-            <th>Subtotal</th>
+            <th class="font-weight-bold" width="10%">Subtotal</th>
             <th width="1%" align="center">Aksi</th>
           </tr>
         </thead>
           <?php
             $no=1;
-            $result = $connect->query("SELECT * FROM temp");
+            $result = $connect->query("SELECT * FROM temp_edit_jual");
             $nums   = $result->num_rows;
           ?>
         <tbody>
@@ -146,28 +111,28 @@ if (isset($_GET['status'])) {
                 <td><?= $data->barcode ?></td>
                 <td><?= $data->nama ?></td>
                 <td><?= $data->satuan ?></td>
-                <td>Rp. <?= number_format($data->harga) ?></td>
+                <td><?= number_format($data->jual) ?></td>
                 <td align="center">
-                  <form action="action/action?act=edit-qty-cart" method="POST" align="center">
+                  <form action="action/actionjual?act=edit-qty-cart-beli" method="POST" align="center">
+                    <input type="hidden" name="id" value="<?= $id ?>">
                     <input type="hidden" name="kode" value="<?= $data->kode_barang ?>">
-                    <input type="hidden" name="harga" value="<?= $data->harga ?>">
+                    <input type="hidden" name="harga" value="<?= $data->jual ?>">
                     <input type="text" min="0" name="qty" class="form-control text-xs text-center" value="<?= $data->qty ?>">
                   </form>
                 </td>
-                <td style="background-color : #DCDCDC">Rp. <?= number_format($data->subtotal) ?></td>
-                <td><a href="action/action?act=del-cart-penjualan&&data=<?= $data->kode_barang ?>" class="fa fa-trash"></a></td>
+                <td class="font-weight-bold" style="background-color : #DCDCDC">Rp. <?= number_format($data->subtotal) ?></td>
+                <td><a href="action/actionjual?act=del-cart-penjualan&data=<?= $data->kode_barang ?>&id=<?= $id ?>" class="fa fa-trash" title="Hapus"></a></td>
               </tr>
         <?php $no++; } ?>
 
           <?php
-            $result = $connect->query("SELECT SUM(subtotal) AS total FROM temp");
+            $result = $connect->query("SELECT SUM(subtotal) AS total FROM temp_edit_jual");
             $data   = $result->fetch_object();
 
           ?>
               <tr >
                 <td colspan='6' style="color : red" align="center"><strong>Total Harga</strong></td>
                 <td  style='color : red'><strong>Rp. <?= number_format($data->total) ?></strong></td>
-                <td></td>
               </tr>
               <tr>
                 <td colspan="8"></td>
@@ -176,21 +141,21 @@ if (isset($_GET['status'])) {
           </table>
           
 
-
-           <div style="float: right; line-height: 1px">
-            <form action="action/action.php?act=simpan-penjualan" class="form-horizontal form-label-left" method="post" style="font-size: 14px" id="myForm">
-              <input type="hidden" name="created" value="<?= $nama ?>">
+          <div style="float: right; line-height: 1px">
+            <form action="action/actionjual.php?act=simpan-penjualan" class="form-horizontal form-label-left" method="post" style="font-size: 14px" id="myForm">
+              <input type="hidden" name="created" value="<?= $kasir ?>">
+              <input type="hidden" name="id" value="<?= $id ?>">
               <div class="form-group mb-0">
                 <label class="control-label col-md-9 col-sm-3 col-xs-12"> Grand Total <span class="required"></span></label>
                   <div class="col-md-12">
                     <input type="text" name="input_total" id="input-total" required="required" class="form-control" style="color : red; font-size: 12px" readonly value=" "/>
-                    <input type="hidden" name="kode_trans" value="<?php echo "$kode".$dt->count+1; ?>"/>
+                    <input type="hidden" name="kode_trans" value="<?= $no_transaksi ?>"/>
                   </div>
               </div>
               <div class="form-group mb-0">
                 <label class="control-label col-md-9 col-sm-3 col-xs-12" for="customer"> Pelanggan <span class="required"></span></label>
                   <div class="col-md-12">
-                    <input type="text" name="customer" autocomplete="off" class="form-control" placeholder="Umum" style="color : red; font-size: 12px" />
+                    <input type="text" name="customer" autocomplete="off" class="form-control" id="customer" value="<?= $customer ?>" style="color : red; font-size: 12px" />
                   </div>
               </div>
                
@@ -206,7 +171,7 @@ if (isset($_GET['status'])) {
                   <label class="control-label col-md-9"> Jatuh Tempo<span class="required"></span></label>
                   <div class="col-md-12 col-sm-6 col-xs-12">
                     <div class="input-group">
-                      <?php $date  = date('Y-m-01'); ?>
+                      <?php $date  = date('d-m-Y'); ?>
                       <input type="date" class="form-control" name="jatuh_tempo" style="border-top-left-radius :  5px; border-bottom-left-radius :  5px; font-size: 14px;">
                       <span class="input-group-btn">
                         <div  class="btn btn-primary" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 14px"><span class="fa fa-calendar"></span>
@@ -285,11 +250,7 @@ if (isset($_GET['status'])) {
     </div>
   </div>
 
-
-
-  <!------------------------------------------------------------------------------------------- -->
-
-<!-- modal view data barang -------------------------------------------------------------------------- -->
+<!-- modal view data barang ------------------------------------------------------------------------------------------- -->
      <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="font-size: 10px">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -321,8 +282,9 @@ if (isset($_GET['status'])) {
             <td>Rp. <?= number_format($data->jual) ?></td>
             <td><?= $data->stok ?></td>
             <td>
-              <form action="action/action?act=add-cart-penjualan" method="POST">
+              <form action="action/actionjual?act=add-cart-penjualan" method="POST">
                 <input type="hidden" name="kode_barang" value="<?= $data->kode ?>">
+                <input type="hidden" name="id" value="<?= $id ?>">
                 <button type="submit" class='btn btn-dark btn-sm' name="pilih">Pilih</button>
               </form>
             </td>
@@ -334,7 +296,7 @@ if (isset($_GET['status'])) {
         </div>
       </div>
     </div>
-<!-- end view data barang -->
+<!-- end view data barang --------------------------------------------------------------------------------------------- -->
 
 <script>
   var form = $('#myForm');
@@ -343,24 +305,18 @@ if (isset($_GET['status'])) {
     tempo = $('#jatuh-tempo');
     kurang = $('#kurang');
     bayar = $('.inputbayar');
-    kembali = $('#kembali');
 
     bayar.hide();
     tempo.hide();
     kurang.hide();
-    kembali.hide();
 
     cek_tunai.on('click', function() {
         if($(this).is(':checked')) {
           bayar.show();
           bayar.find('input').attr('required', true);
-          kembali.show();
-          kembali.find('input').attr('required', true);
         } else {
           bayar.hide();
           bayar.find('input').attr('required', false);
-          kembali.hide();
-          kembali.find('input').attr('required', false);
         }
     })
     cek_hutang.on('click', function() {
@@ -394,16 +350,16 @@ if (isset($_GET['status'])) {
               $kodecari = $data->kode;
               $barcari = $data->barcode;
               $namacari = $data->nama; ?>
-            <form action="action/action?act=add-cart-penjualan" method="POST" id="formcart">
+            <form action="action/actionjual?act=add-cart-penjualan" method="POST" id="formcart">
               <input type="hidden" name="id" value="<?= $no_transaksi; ?>">
               <input type="hidden" name="kode_barang" value="<?= $kodecari; ?>">
               <input type="hidden" name="barcode" value="<?= $barcari; ?>">
               <input type="hidden" name="nama" value="<?= $namacari; ?>">
             </form> <?php }
         }elseif ($row_cnt > 1){
-            echo "<meta http-equiv='refresh' content='0; url=home?p=form-penjualan&status=2'>";
+            echo "<meta http-equiv='refresh' content='0; url=home?p=form-edit-penjualan&id=$no_transaksi&status=2'>";
         }elseif($row_cnt < 1){
-            echo "<meta http-equiv='refresh' content='0; url=home?p=form-penjualan&status=3'>";
+            echo "<meta http-equiv='refresh' content='0; url=home?p=form-edit-penjualan&id=$no_transaksi&status=3'>";
         }
     }
    ?>

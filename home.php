@@ -10,7 +10,6 @@ die(
 }
 ?>
 
-
 <?php include 'pages/include/tgl_indo.php'; ?>
 <?php include 'pages/modul/terbilang.php'; ?>
 <?php include 'pages/modul/tgl_indo.php'; ?>
@@ -564,6 +563,10 @@ figure:hover figcaption{
             
                     include 'pages/view/laporan.php';
           
+          }elseif ($getpage == 'report-pembelian') {
+            
+                    include 'pages/report/pembelian.php';
+
           }elseif ($getpage == 'report-penjualan') {
             
                     include 'pages/report/penjualan.php';
@@ -591,6 +594,10 @@ figure:hover figcaption{
           }elseif ($getpage == 'form-edit-pembelian') {
             
                     include 'pages/view/form-edit-pembelian.php';
+
+          }elseif ($getpage == 'form-edit-penjualan') {
+            
+                    include 'pages/view/form-edit-penjualan.php';
 
           }else 
                     include '404.php'

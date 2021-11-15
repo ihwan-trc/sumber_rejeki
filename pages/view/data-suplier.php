@@ -44,7 +44,7 @@ if (isset($_GET['status'])) {
               <div class="table-responsive">
 
                   <div class="my-2"></div>
-                  <a href="#" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#exampleModalCenter"> 
+                  <a href="#" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#exampleModalCenter" title="tambah"> 
                     <span class="icon text-white-50">
                       <i class="fas fa-folder-open"></i>
                     </span>
@@ -76,9 +76,9 @@ if (isset($_GET['status'])) {
                           <td>$data->telp</td>
                           <td>$data->email</td>
                           <td>$data->alamat</td>
-                          <td>
-                            <a href='action/action.php?act=del-sup&&kode=$data->kode' class='btn btn-danger btn-sm'  data-id=$data->kode><span class='fa fa-trash'></span> Hapus</a>
-                            <a href='#edit_modal' class='btn btn-dark btn-sm' data-toggle='modal' data-id='$data->kode'><span class='fa fa-edit'></span> Ubah</a>
+                          <td align=center>
+                            <a href='#edit_modal' class='btn btn-info btn-sm' data-toggle='modal' data-id='$data->kode' title='edit'><span class='fa fa-edit'></span></a>
+                            <a href='action/action.php?act=del-sup&&kode=$data->kode' class='btn btn-danger btn-sm' data-id=$data->kode title='hapus'><span class='fa fa-trash'></span></a>
                           </td> 
                         </tr>"; 
                         $no++;

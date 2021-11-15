@@ -62,18 +62,16 @@ $level = $_SESSION['level'];
             <input type="text" class="form-control" onkeyup="convertToRupiah(this);" style="font-size: 12px" name="hjual" value="<?= $dt->jual ?>">
           </div>
           <hr width="100%" align="center" color="#0A1B2A">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label for="exampleFormControlInput1">Expired</label>
             <input type="date" class="form-control" name="expired" style="font-size: 12px" value="<?= $dt->expired ?>">
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label for="exampleFormControlInput1">Stok</label>
             <input class="form-control" onkeyup="convertToRupiah(this);" style="font-size: 12px" name="stok" value="<?= $dt->stok ?>">
           </div>
-          <hr width="100%" align="center" color="#0A1B2A">
         <?php if ($level == 'Admin') { ?>
-          <div class="col-md-6">
-            <!-- <?php echo $dt->status ?> -->
+          <!-- <div class="col-md-4">
             <label for="exampleFormControlInput1">Status Barang</label><br>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                   <label <?php if ($dt->status == 'aktif'){ echo 'class="btn btn-dark btn-sm active"';  } else echo 'class="btn btn-dark btn-sm"';  ?> >
@@ -83,12 +81,10 @@ $level = $_SESSION['level'];
                     <input type="radio" name="status" id="status" autocomplete="off" value="tidak" <?php if($dt->status == 'tidak'){ echo 'checked'; }   ?> > Non - Aktif
                   </label>
                 </div>
-
-            <!-- <input type="date" class="form-control" style="font-size: 12px" name="expire"> -->
-          </div>
+          </div> -->
 
 
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <label for="exampleFormControlInput1">Edit</label><br>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                   <label <?php if($dt->edit == 'buka'){ echo 'class="btn btn-danger btn-sm active"';  } else echo 'class="btn btn-danger btn-sm"';  ?>>
@@ -98,7 +94,7 @@ $level = $_SESSION['level'];
                     <input type="radio" name="edit" id="option2" autocomplete="off" value="tutup" <?php if($dt->edit == 'tutup'){ echo 'checked'; } ?> > Tutup
                   </label>
                 </div>
-            </div>
+            </div> -->
         </div><br>
   
         <?php } ?>

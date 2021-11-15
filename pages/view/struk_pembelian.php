@@ -1,7 +1,16 @@
 <?php include '../../config.php'; ?>
 
 
-<?php $get_struk = $_GET['kode']; ?>
+<?php 
+	$get_struk = $_GET['kode'];
+	$status = $_GET['status'];
+
+	if ($status == "Belum Lunas") {
+		$kmbli = "Kekurangan";
+	}else{
+		$kmbli = "Kembalian";
+	}
+?>
  
 
 <!DOCTYPE html>
@@ -62,7 +71,7 @@
 	</tr>
 	<tr style="text-align: right;">
 		<td width="20%" style="min-width: 30%; max-width: 30px"></td>
-		<td width="40%" style="min-width: 20%; max-width: 120px;">Kembali :</td>
+		<td width="40%" style="min-width: 20%; max-width: 120px;"><?php echo $kmbli ?> :</td>
 		<td width="40%" style="min-width: 50%; max-width: 120px;"><?= number_format($exe->bayar-$exe->total_hbeli) ?></td>
 	</tr>
 

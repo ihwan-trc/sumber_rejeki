@@ -1,0 +1,262 @@
+<?php
+    include '../config.php';
+    session_start();
+
+//data barang ---------------------------------------------------------------------------------------------------------------------------------------
+    if ($_GET['act']=='edit-cart-penjualan'){
+        $result = $connect->query("SELECT * FROM temp_edit_jual");
+        $row_cnt = $result->num_rows;
+        if ($row_cnt != 0) {
+            $connect->query("DELETE FROM temp_edit_jual");
+        }
+    	$id = $_POST['id'];
+        $customer = $_POST['customer'];
+        $query=$connect->query("SELECT * FROM detail WHERE id='$id'");
+            while($data=$query->fetch_object())
+            {
+                $kode_barang = $data->kode_barang;
+                $harga = $data->harga;
+                $diskon = $data->diskon;
+                $qty = $data->qty;
+                $subtotal = $data->subtotal;
+                $pot = $data->pot;
+
+                $query1=$connect->query("SELECT * FROM barang WHERE kode='$kode_barang'");
+                while($data1=$query1->fetch_object())
+                {
+                    $barcode = $data1->barcode;
+                    $nama = $data1->nama;
+                    $satuan = $data1->satuan;
+                    $jual = $data1->jual;
+                    $beli = $data1->beli;
+
+                    $que=$connect->query("SELECT subtotal, count(kode_barang) AS total, SUM(qty) AS upqty FROM temp_edit_jual WHERE kode_barang='$kode_barang'");
+	                while($data1=$que->fetch_object())
+	                {
+	                    $total  = $data1->total;
+	                    $upqty  = $data1->upqty;
+	                    $h_awal = $data1->subtotal;
+
+	                    $tot_qty    = $qty+$upqty;
+	                    $qtyup      = $upqty+$qty;
+	                    $sub        = $beli*$qtyup;
+	                    @$harga_dis = (($sub*$disc)/100);
+	                    $bayar      = $sub-$harga_dis;
+	                }
+
+                    if ($total==0 ) {
+                    $sql = $connect->query("INSERT INTO temp_edit_jual
+                        (id,kode_barang,barcode,nama,satuan,beli,jual,diskon,qty,subtotal,pot)
+                        VALUES 
+                        ('$id','$kode_barang','$barcode','$nama','$satuan','$harga','$jual','$diskon','$qty','$subtotal','$pot')");
+	                }else{
+	                	$sql = $connect->query("UPDATE temp_edit_jual SET kode_barang='$kode_barang',barcode='$barcode', nama='$nama', satuan='$satuan', beli='$beli', jual='$jual', diskon='$diskon', qty='$qty', subtotal='$subtotal', pot='$pot' WHERE kode_barang='$kode_barang' ");
+	                }
+                }
+            }
+        
+        echo "<script>document.location.href='../home?p=form-edit-penjualan&id=$id';</script>";
+
+    // }elseif ($_GET['act']=='edit-hbeli-cart-beli') {
+
+    //     $id   = $_POST['id'];
+    //     $kode   = $_POST['kode'];
+    //     $hbeli    = str_replace(".", "", $_POST['hbeli']);
+    //     $qty   = $_POST['qty'];
+    //     $subtotal = $hbeli*$qty;
+
+    //     $edithbeli = $connect->query("UPDATE temp_edit_jual SET beli='$hbeli', subtotal='$subtotal' WHERE kode_barang='$kode' ");
+
+    //     if ($edithbeli) {
+    //         echo "<script>document.location.href='../home?p=form-edit-penjualan&id=$id';</script>";
+    //     }else
+    //         echo "Gagal";
+
+    // }elseif ($_GET['act']=='edit-hjual-cart-beli') {
+
+    //     $kode   = $_POST['kode'];
+    //     $id   = $_POST['id'];
+    //     $hjual    = str_replace(".", "", $_POST['hjual']);
+
+    //     $edithjual = $connect->query("UPDATE temp_edit_jual SET jual='$hjual' WHERE kode_barang='$kode' ");
+
+    //     if ($edithjual) {
+    //         echo "<script>document.location.href='../home?p=form-edit-penjualan&id=$id';</script>";
+    //     }else
+    //         echo "Gagal";
+
+    }elseif ($_GET['act']=='edit-qty-cart-beli') {
+
+        $kode   = $_POST['kode'];
+        $id   = $_POST['id'];
+        $qtyupdate = $_POST['qty'];
+        $sub    = $_POST['harga']*$qtyupdate;
+
+        $query_editqty = $connect->query("UPDATE temp_edit_jual SET qty='$qtyupdate', subtotal='$sub' WHERE kode_barang='$kode' ");
+
+        if ($query_editqty) {
+            echo "<script>document.location.href='../home?p=form-edit-penjualan&id=$id';</script>";
+        }else
+            echo "Gagal";
+
+    }elseif ($_GET['act']=='del-cart-penjualan') {
+
+        $kode = $_GET['data'];
+        $id = $_GET['id'];
+
+        $sql  = $connect->query("DELETE FROM temp_edit_jual WHERE kode_barang = '$kode'");
+
+        if ($sql) {
+            echo "<script>document.location.href='../home?p=form-edit-penjualan&id=$id';</script>";
+        }else
+            echo "Gagal";
+
+    }elseif($_GET['act']=='add-cart-penjualan'){
+
+        date_default_timezone_set("Asia/Jakarta");
+            $use = $_SESSION['username'];
+            $id         = $_POST['id'];
+            $kodebarang = $_POST['kode_barang'];
+            $qty        = 1;
+            $disc       = 0;
+            $pot        = 0;
+            $tanggal    = date("d-m-Y");
+            if (isset($_POST['pilih'])) {
+                $f1o=$connect->query("SELECT * FROM barang WHERE kode='$kodebarang'");
+            }else{
+                $barcode = $_POST['barcode'];
+                $nama    = $_POST['nama'];
+                $f1o=$connect->query("SELECT * FROM barang WHERE nama='$nama' OR barcode='$barcode='");
+            }
+
+            while($data = $f1o->fetch_object())
+            {
+                $kode12  = $data->kode;
+                $barcode = $data->barcode;
+                $nama    = $data->nama;
+                $satuan  = $data->satuan;
+                $hbeli   = $data->beli;
+                $hjual   = $data->jual;
+                $stok    = $data->stok;
+          
+
+                $que=$connect->query("SELECT subtotal, count(kode_barang) AS total, SUM(qty) AS upqty FROM temp_edit_jual WHERE kode_barang='$kode12'");
+                while($data1=$que->fetch_object())
+                {
+                    $total  = $data1->total;
+                    $upqty  = $data1->upqty;
+                    $h_awal = $data1->subtotal;
+
+                    $tot_qty    = $qty+$upqty;
+                    $qtyup      = $upqty+$qty;
+                    $sub        = $hbeli*$qtyup;
+                    @$harga_dis = (($sub*$disc)/100);
+                    $bayar      = $sub-$harga_dis;
+                }
+
+                if ($total==0 ) {
+                    $sql = $connect->query("INSERT INTO temp_edit_jual
+                        (id,kode_barang,barcode,nama,satuan,beli,jual,diskon,qty,subtotal,pot)
+                        VALUES 
+                        ('$id','$kode12','$barcode','$nama','$satuan','$hbeli','$hjual','$disc','$qty','$sub','$pot')");
+                }else {
+                    $update = $qty+$upqty;
+                    $query4 = $connect->query("UPDATE temp_edit_jual SET qty='$update', subtotal='$bayar', diskon='$disc' WHERE kode_barang='$kode12' ");
+                }
+            }
+            echo "<script>document.location.href='../home?p=form-edit-penjualan&id=$id';</script>";
+
+    }elseif ($_GET['act']=='simpan-penjualan') {
+	    date_default_timezone_set("Asia/Jakarta");
+
+	    $kode_trans = $_POST['kode_trans'];
+	    $stokbeli = $connect->query("SELECT * FROM detail WHERE id='$kode_trans'");
+		    while ($beli = $stokbeli->fetch_object()) {
+			    $qtybeli = $beli->qty;
+			    $kodebeli = $beli->kode_barang;
+
+	    	$querystok = $connect->query("SELECT * FROM barang WHERE kode='$kodebeli'");
+		    	while ($stokbrg = $querystok->fetch_object()) {
+				    $qtybrg = $stokbrg->stok;
+				    $stok = $qtybrg + $qtybeli;
+				    $queryupstok = $connect->query("UPDATE barang SET stok='$stok' WHERE kode='$kodebeli'");
+				}
+			}
+		
+			$kode_trans = $_POST['kode_trans'];
+			$res        = $connect->query("SELECT SUM(subtotal) AS total, sum(pot) AS pot FROM temp_edit_jual");
+	    	$ex         = $res->fetch_object();
+	        $pot        = $ex->pot;
+
+	        $kode_trans = $_POST['kode_trans'];
+	        $tanggal    = date("y-m-d");
+	        $jatuh_tempo= $_POST['jatuh_tempo'];
+	        $status     = $_POST['status'];
+	        $total1     = $_POST['input_total'];
+	        $total      = str_replace(".", "", $total1);
+	        $bayar      = $_POST['input_bayar'];
+	        $bayar_t    = str_replace(".", "", $bayar);
+	        $kem        = $_POST['input_kembali'];
+	        $kembali    = $bayar_t-$total;
+	        $kasir      = $_POST['created'];
+	        $customer    = $_POST['customer'];
+	        if ($status == 'Lunas') {
+	            $hutang = 0;
+	            $kembalian = $kembali;
+	        }elseif ($status == 'Belum Lunas') {
+	            $hutang = $kembali;
+	            $kembalian = 0;
+	        }
+
+    	$result = $connect->query("SELECT * FROM temp_edit_jual");
+	        while ($data = $result->fetch_object()) {
+		        $kode       = $data->kode_barang;
+		        $harga      = $data->beli;
+		        $jual       = $data->jual;
+		        $diskon     = $data->diskon;
+		        $qty        = $data->qty;
+		        $subtotal   = $data->subtotal;
+		        $pot        = $data->pot;
+
+        		$sql4 = $connect->query("SELECT * FROM detail WHERE kode_barang = '$kode' AND id='$kode_trans'");
+	        		while ($data1 = $sql4->fetch_object()) {
+	        			$kdbrg= $data1->kode_barang;
+	            		$qtybli = $data1->qty;
+                        $idbeli = $data1->id;
+	        		}
+                    if ($kode == $kdbrg) {
+                        $simpan = $connect->query("UPDATE detail SET harga='$harga', diskon='$diskon', qty='$qty', subtotal='$subtotal', pot='$pot' WHERE kode_barang='$kode' AND id='$kode_trans'  ");
+                    }elseif ($kode != $kdbrg) {
+                        $simpan = $connect->query("INSERT INTO detail
+                        (id,kode_barang,harga,diskon,qty,subtotal,pot)
+                        VALUES 
+                        ('$kode_trans','$kode','$harga','$diskon','$qty','$subtotal','$pot')");
+                    }
+
+                    $sqlstok = $connect->query("SELECT * FROM detail WHERE kode_barang='$kode' AND id='$kode_trans'");
+                    while ($datastok = $sqlstok->fetch_object()) {
+                        $kdbrgstok= $datastok->kode_barang;
+                        $hbeli = $datastok->harga;
+                        $qtybli = $datastok->qty;
+                        $adstok = $stok - $qtybli;
+                        $upstok = $connect->query("UPDATE barang SET stok ='$adstok' WHERE kode = '$kdbrgstok'");
+                    } 
+
+                    $sql5 = $connect->query("SELECT detail.kode_barang FROM detail LEFT JOIN temp_edit_jual ON detail.kode_barang = temp_edit_jual.kode_barang WHERE temp_edit_jual.kode_barang IS NULL");
+                    while ($dta = $sql5->fetch_object()) {
+                        $kbarang = $dta->kode_barang;
+                        $qhapus = $connect->query("DELETE FROM detail WHERE kode_barang='$kbarang' AND id='$kode_trans'");
+                    }                   
+        	}
+
+		$query = $connect->query("UPDATE penjualan SET customer='$customer',tgl='$tanggal',jatuh_tempo='$jatuh_tempo', status='$status', total_harga='$total', total_bayar='$bayar_t', kembali='$kembalian', kasir='$kasir',hutang='$hutang' WHERE id='$kode_trans'");
+
+        $connect->query("DELETE FROM temp_edit_jual");
+
+        if (isset($_POST['simpan'])) {
+            echo "<meta http-equiv='refresh' content='0; url=../home?p=penjualan&status=sukses'>";
+        }elseif (isset($_POST['simpan_cetak'])) {
+            echo "<meta http-equiv='refresh' content='0; url=../home?p=penjualan&status=sukses&kode=$kode_trans'>";
+        }
+    }
+ ?>

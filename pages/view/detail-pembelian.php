@@ -1,6 +1,10 @@
 <?php 
     if (isset($_GET['id'])) {
       $id=$_GET['id']; 
+
+      $sql = $connect->query("SELECT * FROM pembelian WHERE id='$id'");
+        while ($dt = $sql->fetch_object()){ 
+          $status = $dt->status;
   ?>
 <div class="card shadow mb-4">
   <div class="card-header py-3 col-12">
@@ -9,7 +13,7 @@
         <h5 class="font-weight-bold text-primary">Detail Transaksi Pembelian</h5>
       </div>
       <div class="mt-3">
-        <a href="pages/view/struk_pembelian?kode=<?= $id ?>"  class="btn btn-primary btn-sm">
+        <a href="pages/view/struk_pembelian?kode=<?= $id ?>&status=<?= $status ?>"  class="btn btn-primary btn-sm">
           <i class="fa fa-print"> </i> Cetak Transaksi
         </a>
       </div>
@@ -19,10 +23,7 @@
     <div class="row">
       <div class="col-9 mt-1 mb-1">
         <table class="font-weight-bold" style=" font-size: 14px;">
-          <?php 
-              $sql = $connect->query("SELECT * FROM pembelian WHERE id='$id'");
-                while ($dt = $sql->fetch_object()){ 
-            ?>
+          
           <tr>
             <td>No.Transaksi</td>
             <td class="text-center" width="10%">:</td>

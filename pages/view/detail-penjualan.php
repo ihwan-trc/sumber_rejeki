@@ -30,14 +30,14 @@
             <td class="text-center" width="10%">:</td>
             <td class="text-left"> <?= $dt->kasir ?></td>
           </tr>
-          <?php } ?>
         </table>
       </div>
       <div class="float-right">
-          <a href="pages/view/struk?kode=<?= $id ?>"  class="btn btn-primary btn-sm">
+          <a href="pages/view/struk?kode=<?= $id ?>&status=<?= $dt->status ?>"  class="btn btn-primary btn-sm">
             <i class="fa fa-print"> </i> Cetak Transaksi
           </a>
       </div>
+      <?php } ?>
     </div>
       <table class="table table-keytable" style="font-size: 12px">
         <thead>

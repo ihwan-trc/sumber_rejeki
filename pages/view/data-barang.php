@@ -1,8 +1,7 @@
 <?php 
 
 if($_SESSION['level']!="Admin" AND $_SESSION['level']!="Kasir" ){
-  
-  // header("location:../../error/page_403.html");  
+
 echo "<META HTTP-EQUIV='Refresh'
 CONTENT='0; URL=pages/error/index.html'>";
 }
@@ -35,9 +34,6 @@ if (isset($_GET['status'])) {
 
 } ?>
 
-
-
-
      <div class="card shadow mb-4">
             <div class="card-header py-3">
               <h6 class="m-0 font-weight-bold text-primary">Data Barang</h6>
@@ -46,7 +42,7 @@ if (isset($_GET['status'])) {
               <div class="table-responsive">
 
                   <div class="my-2"></div>
-                  <a href="#" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#exampleModalCenter"> 
+                  <a href="#" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#exampleModalCenter" title="tambah"> 
                     <span class="icon text-white-50">
                       <i class="fas fa-folder-open"></i>
                     </span>
@@ -86,9 +82,9 @@ if (isset($_GET['status'])) {
                       <td>Rp.<?= number_format($data->jual) ?></td>
                       <td><?= $data->stok ?></td>
                       <td class="text-center">
-                        <a href="#edit_modal" class="btn btn-info btn-sm" data-toggle="modal" data-id="<?= $data->kode ?>"><span class="fa fa-edit"></span></a>
+                        <a href="#edit_modal" class="btn btn-info btn-sm" data-toggle="modal" data-id="<?= $data->kode ?>" title="edit"><span class="fa fa-edit"></span></a>
                           
-                        <a href="action/action?kode=<?=$data->kode ?>&&act=del-barang" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span>
+                        <a href="action/action?kode=<?=$data->kode ?>&&act=del-barang" class="btn btn-danger btn-sm"title="hapus"><span class="fa fa-trash"></span>
                         </a>
                       </td>
                     </tr>

@@ -42,18 +42,19 @@ if (isset($_GET['status'])) {
               <div class="table-responsive">
 
                   <div class="my-2"></div>
-                  <a href="?p=form-penjualan" class="btn btn-dark btn-sm"><span class="icon text-white-50"><i class="fas fa-folder-open"></i></span><span class="text"></span><strong>Tambah data </strong></a><p />
+                  <a href="?p=form-penjualan" class="btn btn-dark btn-sm" title="tambah"><span class="icon text-white-50"><i class="fas fa-folder-open"></i></span><span class="text"></span><strong>Tambah data </strong></a><p />
 
                 <table class="table" id="dataTable" width="100%" cellspacing="0" style="font-size: 12px;">
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>No. Struk</th>
+                      <th>No.Struk</th>
                       <th>Tanggal </th>
                       <th>Total</th>
-                      <th>Tunai</th>
-                      <th>Kembali</th>
-                      <th style="text-align : center">Kasir</th>
+                      <th>Status</th>
+                      <th>Hutang</th>
+                      <th>Jatuh Tempo</th>
+                      <th>Pelanggan</th>
                       <th style="text-align : center">Aksi</th>
                     </tr>
                   </thead>
@@ -63,40 +64,46 @@ if (isset($_GET['status'])) {
                       $result = $connect->query("SELECT * FROM penjualan");
                       $nums   = $result->num_rows;
                       while ($data = $result->fetch_object()) { 
+                        if ($data->hutang != 0) {
+                          $hutang = "Rp." .number_format($data->hutang);
+                        }else{
+                          $hutang = '';
+                        }
+                        if ($data->jatuh_tempo != "0000-00-00") {
+                          $jatuh_tempo = date("d/m/Y",strtotime($data->jatuh_tempo));
+                        }else{
+                          $jatuh_tempo = "";
+                        }
                     ?>
                     <tr>
                       <td width="10px" class="text-center"><?= $no ?></td>
                       <td>
-                        <a href="?p=detail-penjualan&id=<?= $data->id ?>" title="Detail">
+                        <a href="?p=detail-penjualan&id=<?= $data->id ?>" title="detail">
                           <?= $data->id ?>
                         </a>
                       </td>
                       <td><?= date("d/m/Y",strtotime($data->tgl)); ?></td>
                       <td><?= number_format($data->total_harga) ?></td>
-                      <td><?= number_format($data->total_bayar) ?></td>
-                      <td><?= number_format($data->kembali) ?></td>
-                      <td><?= $data->kasir ?></td>
+                      <td><?= $data->status ?></td>
+                      <td class="text-danger"><?= $hutang ?></td>
+                      <td><?= $jatuh_tempo ?></td>
+                      <td><?= $data->customer ?></td>
                       <td class="text-center">
                         <div class="row">
-                          <a href="pages/view/struk_penjualan?kode=<?= $data->id ?>" class='btn btn-primary btn-sm'  title="Cetak" target="blank">
+                          <a href="pages/view/struk?kode=<?= $data->id ?>&status=<?= $data->status ?>" class='btn btn-primary btn-sm'  title="Cetak">
                             <span class='fa fa-print'></span>
                           </a> &nbsp;
                           <form action="action/actionjual?act=edit-cart-penjualan" method="POST" name="form_penjualan">
                             <input type="hidden" name="id" value="<?= $data->id ?>">
-                            <input type="hidden" name="suplier" value="<?= $data->suplier ?>">
-                            <button type="submit" class="btn btn-sm btn-info" title="Edit"><span class="fa fa-edit"></span></button>
+                            <input type="hidden" name="customer" value="<?= $data->customer ?>">
+                            <button type="submit" class="btn btn-sm btn-info" title="edit"><span class="fa fa-edit"></span></button>
                           </form> &nbsp;
 
                           <form action="action/action?act=delete-penjualan" method="POST" name="form_penjualan">
                             <input type="hidden" name="id" value="<?= $data->id ?>">
-                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><span class="fa fa-trash"></span></button>
+                            <button type="submit" class="btn btn-sm btn-danger" title="hapus"><span class="fa fa-trash"></span></button>
                           </form>
                         </div>
-                        <!-- <a href="?p=detail-penjualan&&id=<?= $data->id ?>" class='btn btn-info btn-sm'  title="Detail"><span class='fa fa-eye'></span></a>
-                          
-                        <a href="pages/view/struk?kode=<?= $data->id ?>" class='btn btn-primary btn-sm'  title="Cetak">
-                          <span class='fa fa-print'></span>
-                        </a> -->
                       </td>
                     </tr>
                   <?php $no++; } ?>

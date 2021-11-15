@@ -1,7 +1,16 @@
 <?php include '../../config.php'; ?>
 
 
-<?php $get_struk = $_GET['kode']; ?>
+<?php 
+	$get_struk = $_GET['kode'];
+		$status = $_GET['status'];
+
+	if ($status == "Belum Lunas") {
+		$kmbli = "Kekurangan";
+	}else{
+		$kmbli = "Kembalian";
+	} 
+?>
  
 
 <!DOCTYPE html>
@@ -49,13 +58,13 @@
 	<tr style="text-align: right;">
 		<td width="20%" style="min-width: 30%; max-width: 30px"></td>
 		<td width="40%" style="min-width: 20%; max-width: 120px;">Sub total :</td>
-		<td width="40%" style="min-width: 50%; max-width: 120px;"><?= number_format($exe->total_harga + $exe->diskon) ?></td>
+		<td width="40%" style="min-width: 50%; max-width: 120px;"><?= number_format($exe->total_harga) ?></td>
 	</tr>
-	<tr style="text-align: right;">
+	<!-- <tr style="text-align: right;">
 		<td width="20%" style="min-width: 30%; max-width: 30px"></td>
 		<td width="40%" style="min-width: 20%; max-width: 120px;">Diskon :</td>
 		<td width="40%" style="min-width: 50%; max-width: 120px;"><?= number_format($exe->diskon) ?></td>
-	</tr>
+	</tr> -->
 	<tr style="text-align: right;">
 		<td width="20%" style="min-width: 30%; max-width: 30px"></td>
 		<td width="40%" style="min-width: 20%; max-width: 120px;">Grand total :</td>
@@ -68,7 +77,7 @@
 	</tr>
 	<tr style="text-align: right;">
 		<td width="20%" style="min-width: 30%; max-width: 30px"></td>
-		<td width="40%" style="min-width: 20%; max-width: 120px;">Kembali :</td>
+		<td width="40%" style="min-width: 20%; max-width: 120px;"><?php echo $kmbli ?> :</td>
 		<td width="40%" style="min-width: 50%; max-width: 120px;"><?= number_format($exe->total_bayar-$exe->total_harga) ?></td>
 	</tr>
 

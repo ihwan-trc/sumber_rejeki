@@ -52,7 +52,7 @@ if (isset($_GET['status'])) {
               <div class="table-responsive">
 
                   <div class="my-2"></div>
-                  <a href="?p=form-pembelian" class="btn btn-dark btn-sm"><span class="icon text-white-50"><i class="fas fa-folder-open"></i></span><span class="text"></span><strong>Tambah data </strong></a><p />
+                  <a href="?p=form-pembelian" class="btn btn-dark btn-sm" title="tambah"><span class="icon text-white-50"><i class="fas fa-folder-open"></i></span><span class="text"></span><strong>Tambah data </strong></a><p />
 
                 <table class="table" id="dataTable" width="100%" cellspacing="0" style="font-size: 12px;">
                   <thead>
@@ -89,7 +89,7 @@ if (isset($_GET['status'])) {
                     <tr>
                       <td width="10px" class="text-center"><?= $no ?></td>
                       <td>
-                        <a href="?p=detail-pembelian&id=<?= $data->id ?>" title="Detail">
+                        <a href="?p=detail-pembelian&id=<?= $data->id ?>" title="detail">
                           <?= $data->nota ?>
                         </a>
                       </td>
@@ -102,18 +102,18 @@ if (isset($_GET['status'])) {
                       <td><?= $data->suplier ?></td>
                       <td class="text-center">
                         <div class="row">
-                          <a href="pages/view/struk_pembelian?kode=<?= $data->id ?>" class='btn btn-primary btn-sm'  title="Cetak" target="blank">
+                          <a href="pages/view/struk_pembelian?kode=<?= $data->id ?>&status=<?= $data->status ?>" class='btn btn-primary btn-sm'  title="Cetak">
                             <span class='fa fa-print'></span>
                           </a> &nbsp;
                           <form action="action/actionbeli?act=edit-cart-pembelian" method="POST" name="form_pembelian">
                             <input type="hidden" name="id" value="<?= $data->id ?>">
                             <input type="hidden" name="suplier" value="<?= $data->suplier ?>">
-                            <button type="submit" class="btn btn-sm btn-info" title="Edit"><span class="fa fa-edit"></span></button>
+                            <button type="submit" class="btn btn-sm btn-info" title="edit"><span class="fa fa-edit"></span></button>
                           </form> &nbsp;
 
                           <form action="action/action?act=delete-pembelian" method="POST" name="form_pembelian">
                             <input type="hidden" name="id" value="<?= $data->id ?>">
-                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><span class="fa fa-trash"></span></button>
+                            <button type="submit" class="btn btn-sm btn-danger" title="hapus"><span class="fa fa-trash"></span></button>
                           </form>
                         </div>
                       </td>
