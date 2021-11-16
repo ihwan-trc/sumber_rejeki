@@ -1,87 +1,77 @@
-<?php include 'config.php';
-session_start();
-
-if(!isset($_SESSION['username'])){
-die(
-
- header('location: index.html')
-);
-
-}
+<?php 
+  session_start();
+  include 'config.php';
+  if(!isset($_SESSION['username'])){
+    die(
+        header('location: index.html')
+      );
+    }
+  include 'pages/include/tgl_indo.php';
+  include 'pages/modul/terbilang.php';
+  include 'pages/modul/tgl_indo.php';
+  $query = $connect->query("SELECT * FROM data_toko");
+    while ($data = mysqli_fetch_assoc($query)) {
+      $nama_toko = $data['nama'];
+    }
 ?>
 
-<?php include 'pages/include/tgl_indo.php'; ?>
-<?php include 'pages/modul/terbilang.php'; ?>
-<?php include 'pages/modul/tgl_indo.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>TB. Sumber Rejeki</title>
+  <title><?= $nama_toko ?></title>
   <link rel="icon" href="img/icon.png" type="image/png">
   <link rel="stylesheet" href="asset/css/jquery-ui.css">
  <!-- Custom fonts for this template -->
   <link href="asset/icon/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <link href="asset/fontawesome-free/css/all.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  
   <link rel="stylesheet" href="asset/css/select2.min.css"/>
-  
   <link rel="stylesheet" href="asset/css/allert.css"/>
-
   <!-- Custom styles for this template -->
   <link href="asset/css/sb-admin-2.min.css" rel="stylesheet">
   <link href="asset/css/stylesheet.css" rel="stylesheet">
-
   <link rel="stylesheet" href="asset/css/border-list.css">
-
-  <!-- <link href="css/style.css" rel="stylesheet"> -->
-  <!-- <script type="text/javascript" src="asset/js/jquery.js"></script> -->
   <!-- Custom styles for this page -->
   <link href="asset/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
- <style type="text/css">
-   .sembunyikan{
-  display: none;
-  }
+  <style type="text/css">
+    .sembunyikan{
+      display: none;
+    }
 
-  figure{
-  width: 5rem;
-  height: 5rem;
-  clip-path: circle(50% at 50% 50%);
-  cursor: pointer;
-  position: relative;
-}
+    figure{
+      width: 5rem;
+      height: 5rem;
+      clip-path: circle(50% at 50% 50%);
+      cursor: pointer;
+      position: relative;
+    }
 
-.img {
-  margin-top: 10px;
-  width: 100%;
-  height: 100%;
-  transform: scale(0.75);
-  transition: all 0.4s ease;
-}
+    .img {
+      margin-top: 10px;
+      width: 100%;
+      height: 100%;
+      transform: scale(0.75);
+      transition: all 0.4s ease;
+    }
 
+    figure:hover .img{
+      transform: scale(0.5);
+      filter: blur(1px) brightness(70%);
+    }
 
-figure:hover .img{
-  transform: scale(0.5);
-  filter: blur(1px) brightness(70%);
-}
-
-figure:hover figcaption{
-  opacity: 1;
-  transform: translate(-50%, -50%);
-}
- </style>
+    figure:hover figcaption{
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  </style>
 
   <script src="js/Chart.bundle.js"></script>
-
-
   <script src="asset/js/jquery-1.10.2.js"></script>
   <script src="asset/js/jquery-ui.js"></script>
 
@@ -91,99 +81,33 @@ figure:hover figcaption{
         source : 'pages/modul/search-barang.php'
       });
     });
-    </script>
+  </script>
 
-<script type="text/javascript">
-
-
-  
-</script>
-
-<!--   <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <script type="text/javascript" src="bootstrap.min.js"></script>
- -->
-
-
-  <!-- <script  src="js/jquery.js" type="text/javascript"></script> -->
-
-   <script type="text/javascript">
-
-     window.onload = function() { jam(); }
-
-     function jam() {
-
-      var e = document.getElementById('jam'),
-          d = new Date(), h, m, s;
-          h = d.getHours();
-          m = set(d.getMinutes());
-          s = set(d.getSeconds());
-          e.innerHTML = h +':'+ m +':'+ s;
-      setTimeout('jam()', 1000);
-     }
-     function set(e) {
-      e = e < 10 ? '0'+ e : e;
-      return e;
-     }
-    </script>
-<!-- 
-<script type="text/javascript">
-  function hari_ini(){
-  $hari = date ('D');
- 
-  switch($hari){
-    case 'Sun':
-      $hari_ini = "Minggu";
-    break;
- 
-    case 'Mon':     
-      $hari_ini = "Senin";
-    break;
- 
-    case 'Tue':
-      $hari_ini = "Selasa";
-    break;
- 
-    case 'Wed':
-      $hari_ini = "Rabu";
-    break;
- 
-    case 'Thu':
-      $hari_ini = "Kamis";
-    break;
- 
-    case 'Fri':
-      $hari_ini = "Jumat";
-    break;
- 
-    case 'Sat':
-      $hari_ini = "Sabtu";
-    break;
-    
-    default:
-      $hari_ini = "Tidak di ketahui";   
-    break;
-  }
- 
-  return "<b>" . $hari_ini . "</b>";
- 
-}
-
-    </script>
- -->
- 
+  <script type="text/javascript">
+      window.onload = function() { jam(); }
+      function jam() {
+        var e = document.getElementById('jam'),
+            d = new Date(), h, m, s;
+            h = d.getHours();
+            m = set(d.getMinutes());
+            s = set(d.getSeconds());
+            e.innerHTML = h +':'+ m +':'+ s;
+        setTimeout('jam()', 1000);
+      }
+      function set(e) {
+        e = e < 10 ? '0'+ e : e;
+        return e;
+      }
+  </script>
 
 </head>
 <?php $user = $_SESSION['username']; ?>
 
 <body id="page-top">
-
   <!-- Page Wrapper -->
   <div id="wrapper">
-
     <!-- Sidebar -->
-    <ul class="navbar-nav sidebar bg-gradient-primary sidebar-dark accordion" id="accordionSidebar" >
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="?p=dashboard">
@@ -197,10 +121,11 @@ figure:hover figcaption{
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="?p=dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span></a>
+          <span>Dashboard</span>
+        </a>
       </li>
 
       <!-- Divider -->
@@ -208,177 +133,78 @@ figure:hover figcaption{
 
       <!-- Heading -->
       <div class="sidebar-heading">
-        Interface
+          Interface
       </div>
 
-      <?php if ($_SESSION['level']=='Admin'): { ?>
-            <li class="nav-item">
-              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fa fa-database"></i>
-                <span>Master Data</span>
-              </a>
-              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                  <h6 class="collapse-header">Master Data :</h6>
-                  <a class="collapse-item" href="?p=barang">Data Barang</a>
-                  <a class="collapse-item" href="?p=suplier">Data Suplier</a>
-                  <a class="collapse-item" href="?p=satuan">Data Satuan</a>
-                  <a class="collapse-item" href="?p=kategori">Data Kategori</a>
-                </div>
-              </div>
-            </li>
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fa fa-database"></i>
+          <span>Master Data</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="?p=barang">Data Barang</a>
+            <a class="collapse-item" href="?p=suplier">Data Suplier</a>
+            <a class="collapse-item" href="?p=satuan">Data Satuan</a>
+            <a class="collapse-item" href="?p=kategori">Data Kategori</a>
+          </div>
+        </div>
+      </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-exchange-alt"></i>
-                <span>Transaksi</span>
-              </a>
-              <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                  <h6 class="collapse-header">Transaksi :</h6>
-                  <a class="collapse-item" href="?p=penjualan">Penjualan</a>
-                  <a class="collapse-item" href="?p=pembelian">Pembelian</a>
-                </div>
-              </div>
-            </li>
+      <!-- Nav Item - Utilities Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+          aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-exchange-alt"></i>
+          <span>Transaksi</span>
+        </a>
+        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+          data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="?p=penjualan">Penjualan</a>
+            <a class="collapse-item" href="?p=pembelian">Pembelian</a>
+          </div>
+        </div>
+      </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+      <!-- Divider -->
+      <hr class="sidebar-divider">
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-              Addons
-            </div>
+      <!-- Heading -->
+      <div class="sidebar-heading">
+          Addons
+      </div>
 
-            <li class="nav-item">
-              <a class="nav-link" href="?p=stok-opname">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Stok opname</span></a>
-            </li>
+      <li class="nav-item">
+        <a class="nav-link" href="?p=stok-opname">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Stok opname</span>
+        </a>
+      </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="?p=report">
-                <i class="fa fa-area-chart"></i>
-                <span>Laporan</span></a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link " href="?p=user">
-                <i class="fa fa-user"></i>
-                <span>User</span></a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="?p=pengaturan">
-                <i class="fas fa-fw fa-cog fa-spin"></i>
-                <span>Pengaturan</span></a>
-            </li>
-
-     <?php } ?>
-  <!-- ========================================================================KASIR================================ -->
-      <?php elseif ($_SESSION['level'] == 'Kasir') : {  ?>
-            <li class="nav-item">
-              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Master Data</span>
-              </a>
-              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                  <h6 class="collapse-header">Master Data :</h6>
-                  <a class="collapse-item" href="?p=barang">Data Barang</a>
-                  <a class="collapse-item" href="?p=suplier">Data Suplier</a>
-                  <a class="collapse-item" href="?p=satuan">Data Satuan</a>
-                  <a class="collapse-item" href="?p=kategori">Data Kategori</a>
-                </div>
-              </div>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="?p=penjualan">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Penjualan</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-              Addons
-            </div>
-
-            <li class="nav-item">
-              <a class="nav-link" href="?p=stok-opname">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Stok opname</span></a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="?p=expire">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Expire</span></a>
-            </li>
-
-      <?php } ?>
-<!-- ========================================================================KASIR================================ -->
-      <?php elseif ($_SESSION['level'] == 'Kasir') : {  ?>
-            <li class="nav-item">
-              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Master Data</span>
-              </a>
-              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                  <h6 class="collapse-header">Master Data :</h6>
-                  <a class="collapse-item" href="?p=barang">Data Barang</a>
-                  <a class="collapse-item" href="?p=suplier">Data Suplier</a>
-                  <a class="collapse-item" href="?p=satuan">Data Satuan</a>
-                  <a class="collapse-item" href="?p=kategori">Data Kategori</a>
-                </div>
-              </div>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="?p=penjualan">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Penjualan</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-              Addons
-            </div>
-
-            <li class="nav-item">
-              <a class="nav-link" href="?p=stok-opname">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Stok opname</span></a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="?p=expire">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Expire</span></a>
-            </li>
-
-      <?php } ?>
-
-      <?php else: ?>
-        
-      <?php endif ?>
+      <li class="nav-item">
+        <a class="nav-link" href="?p=report">
+          <i class="fas fa-chart-area"></i>
+          <span>Laporan</span>
+        </a>
+      </li>
 
       <!-- Nav Item - Pages Collapse Menu -->
-
-      <!-- Nav Item - Tables -->
       <li class="nav-item">
-        <a href="#" class="nav-link" data-toggle="modal" data-target="#logoutModal">
-          <i class="fas fa-fw fa-power-off"></i>
-          <span>Log out</span></a>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+          aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-cog fa-spin"></i>
+          <span>Setting</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="?p=pengaturan">Data Toko</a>
+            <a class="collapse-item" href="?p=user">User</a>
+          </div>
+        </div>
       </li>
+
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -392,14 +218,11 @@ figure:hover figcaption{
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
-
       <!-- Main Content -->
       <div id="content">
-
         <!-- Topbar -->
         <!-- <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"> -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
           <!-- Sidebar Toggle (Topbar) -->
           <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
             <i class="fa fa-bars"></i>
@@ -443,7 +266,6 @@ figure:hover figcaption{
             <!-- Nav Item - Alerts -->
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="?p=form-penjualan" id="alertsDropdown">
-                <!-- <i class="fas fa-cash-register"></i> -->
                 <figure>
                   <img class="img" src="img/pos.png">
                 </figure>
@@ -454,8 +276,6 @@ figure:hover figcaption{
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline" id="jam" style="color : purple;"></span>
-
-                <!-- Counter - Messages -->
               </a>
             </li>
 
@@ -477,19 +297,6 @@ figure:hover figcaption{
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <!-- <a class="dropdown-item" href="#">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Activity Log
-                </a> -->
-              <!--   <div class="dropdown-divider"></div> -->
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
@@ -504,122 +311,89 @@ figure:hover figcaption{
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-        <?php $getpage = $_GET['p'] ?>
+        <?php 
+          $getpage = $_GET['p'];
 
-     
-          <?php if ($getpage == 'barang'){
-
-                    include 'pages/view/data-barang.php';
-          
-          }elseif ($getpage == 'barang') {
-
-                    include 'pages/view/data-barang.php';
+          if ($getpage == 'barang'){
+              include 'pages/view/data-barang.php';
 
           }elseif ($getpage == 'suplier') {
-
-                    include 'pages/view/data-suplier.php';
+              include 'pages/view/data-suplier.php';
 
           }elseif ($getpage == 'kategori') {
-            
-                    include 'pages/view/data-kategori.php';
+              include 'pages/view/data-kategori.php';
           
           }elseif ($getpage == 'satuan') {
-            
-                    include 'pages/view/data-satuan.php';
+              include 'pages/view/data-satuan.php';
           
           }elseif ($getpage == 'penjualan') {
-            
-                    include 'pages/view/data-penjualan.php';
+              include 'pages/view/data-penjualan.php';
           
           }elseif ($getpage == 'pembelian') {
-            
-                    include 'pages/view/data-pembelian.php';
+              include 'pages/view/data-pembelian.php';
           
           }elseif ($getpage == 'stok-opname') {
-            
-                    include 'pages/view/stok-opname.php';
+              include 'pages/view/stok-opname.php';
 
           }elseif ($getpage == 'form-penjualan') {
-            
-                    include 'pages/view/form-penjualan.php';
+              include 'pages/view/form-penjualan.php';
           
           }elseif ($getpage == 'form-pembelian') {
-            
-                    include 'pages/view/form-pembelian.php';
+              include 'pages/view/form-pembelian.php';
           
           }elseif ($getpage == 'expire') {
-            
-                    include 'pages/view/data-expire.php';
+              include 'pages/view/data-expire.php';
           
           }elseif ($getpage == 'dashboard') {
-            
-                    include 'pages/view/beranda.php';
+              include 'pages/view/beranda.php';
           
           }elseif ($getpage == 'pengaturan') {
-            
-                    include 'pages/view/pengaturan.php';
+              include 'pages/view/pengaturan.php';
 
           }elseif ($getpage == 'report') {
-            
-                    include 'pages/view/laporan.php';
+              include 'pages/view/laporan.php';
           
           }elseif ($getpage == 'report-pembelian') {
-            
-                    include 'pages/report/pembelian.php';
+              include 'pages/report/pembelian.php';
 
           }elseif ($getpage == 'report-penjualan') {
-            
-                    include 'pages/report/penjualan.php';
+              include 'pages/report/penjualan.php';
 
           }elseif ($getpage == 'report-hutangbeli') {
-            
-                    include 'pages/report/hutangbeli.php';
+              include 'pages/report/hutangbeli.php';
 
           }elseif ($getpage == 'report-hutangjual') {
-            
-                    include 'pages/report/hutangjual.php';
+              include 'pages/report/hutangjual.php';
+
+          }elseif ($getpage == 'report-statistik-penjualan') {
+              include 'pages/report/statistik-penjualan.php';
+
+          }elseif ($getpage == 'report-stok-barang') {
+              include 'pages/report/stok-barang.php';
 
           }elseif ($getpage == 'user') {
-            
-                    include 'pages/view/user.php';
-          
-          }elseif ($getpage == 'report-statistik-penjualan') {
-            
-                    include 'pages/report/statistik-penjualan.php';
-          
-          }elseif ($getpage == 'report-stok-barang') {
-            
-                    include 'pages/report/stok-barang.php';
+              include 'pages/view/user.php';
 
           }elseif ($getpage == 'detail-penjualan') {
-            
-                    include 'pages/view/detail-penjualan.php';
+              include 'pages/view/detail-penjualan.php';
 
           }elseif ($getpage == 'detail-pembelian') {
-            
-                    include 'pages/view/detail-pembelian.php';
+              include 'pages/view/detail-pembelian.php';
 
           }elseif ($getpage == 'form-edit-pembelian') {
-            
-                    include 'pages/view/form-edit-pembelian.php';
+              include 'pages/view/form-edit-pembelian.php';
 
           }elseif ($getpage == 'form-edit-penjualan') {
-            
-                    include 'pages/view/form-edit-penjualan.php';
+              include 'pages/view/form-edit-penjualan.php';
 
           }else 
-                    include '404.php'
+              include '404.php'
           
-
           ?>
-     
-
         </div>
         <!-- /.container-fluid -->
-
       </div>
       <!-- End of Main Content -->
-
 
       <!-- Footer -->
       <footer class="sticky-footer bg-white">
@@ -661,77 +435,38 @@ figure:hover figcaption{
     </div>
   </div>
 
-
-  <!-- Bootstrap core JavaScript-->
-  <!-- <script src="asset/jquery/jquery.min.js"></script> -->
-
   <script src="asset/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- <script src="asset/js/rupiah.js"></script> -->
-
-  <!-- Custom scripts for all pages-->
+  <script src="asset/js/rupiah.js"></script>
+  <script src="asset/js/demo/datatables-demo.js"></script>
+  <script src="asset/js/select2.min.js"></script>
+  <script src="js/script.js"></script>
   <script src="js/sb-admin-2.min.js"></script>
-
-  <!-- rupiah format -->
-  <script type="text/javascript"  src="asset/js/rupiah.js"></script>
-  <!-- end rupiah format -->
-
-  <!-- Page level plugins -->
   <script src="asset/datatables/jquery.dataTables.min.js"></script>
-
   <script src="asset/datatables/dataTables.bootstrap4.min.js"></script>
 
-  <!-- Page level custom scripts -->
-  <script src="asset/js/demo/datatables-demo.js"></script>
-  <!-- <script type="text/javascript" src="js/jquery.js"></script> -->
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
 
-  <script src="js/script.js"></script>
-
-  <script src="asset/js/select2.min.js"></script>
-
-
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-<script type="text/javascript">
-
-$('#selection2').select2({
-          placeholder: 'Pilih barang dulu',
-
- ajax: {
-
-    url: "pages/modul/search-barang.php",
-
-    type: "GET",
-
-    dataType: 'json',
-
-    delay: 250,
-
-    data: function (params) {
-
-      return {
-
-        q: params.term, // search term
-
-      };
-
-    },
-
-    processResults: function(data){
-
-        return { results: data };
-
-      },
-
-    cache: true
-
-  },
-
-  minimumInputLength: 3,
-
-});
-
-</script>
+  <script type="text/javascript">
+    $('#selection2').select2({
+      placeholder: 'Pilih barang dulu',
+        ajax: {
+          url: "pages/modul/search-barang.php",
+          type: "GET",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+            };
+          },
+          processResults: function(data){
+              return { results: data };
+            },
+          cache: true
+        },
+        minimumInputLength: 3,
+      });
+  </script>
 
 </body>
-
 </html>
