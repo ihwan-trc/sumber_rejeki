@@ -571,6 +571,14 @@ figure:hover figcaption{
             
                     include 'pages/report/penjualan.php';
 
+          }elseif ($getpage == 'report-hutangbeli') {
+            
+                    include 'pages/report/hutangbeli.php';
+
+          }elseif ($getpage == 'report-hutangjual') {
+            
+                    include 'pages/report/hutangjual.php';
+
           }elseif ($getpage == 'user') {
             
                     include 'pages/view/user.php';

@@ -47,30 +47,31 @@ $query = $connect->query("SELECT * FROM data_toko");
         </table>
         <hr>
         <div class="text-center">
-          <h6>Laporan Pembelian</h6>
+          <h6>Laporan Penjualan</h6>
           <font size="2"><?= tanggal_indo($awal); ?> - <?= tanggal_indo($akhir);?></font>
         </div><br>
-      <table class="table" id="" width="100%" cellspacing="0" style="font-size: 12px;">
+        <table class="table" id="" width="100%" cellspacing="0" style="font-size: 12px;">
           <thead>
             <tr>
               <th>No</th>
-              <th>No.Faktur</th>
-              <th>Tanggal Pembelian </th>
-              <th>Supplier</th>
+              <th>No.Struk</th>
+              <th>Tanggal Penjualan</th>
+              <th>Pelanggan</th>
               <th>Status</th>
               <th>Hutang</th>
               <th>Jatuh Tempo</th>
               <th>Kasir</th>
               <th>Total</th>
+              
             </tr>
           </thead>
           <tbody>
             <?php 
               $no=1;
-              $result = $connect->query("SELECT * FROM pembelian WHERE tgl BETWEEN '$awal' AND '$akhir' ORDER BY id ASC");
+              $result = $connect->query("SELECT * FROM penjualan WHERE tgl BETWEEN '$awal' AND '$akhir' ORDER BY id ASC");
               $nums   = $result->num_rows;
               while ($data = $result->fetch_object()) { 
-                $total += $data->total_hbeli; 
+                $total += $data->total_harga; 
                 $total_hutang += $data->hutang; 
                 if ($data->hutang != 0) {
                   $hutang =number_format($data->hutang);
@@ -85,14 +86,14 @@ $query = $connect->query("SELECT * FROM data_toko");
             ?>
             <tr>
               <td width="10px" class="text-center"><?= $no ?></td>
-              <td><?= $data->nota ?></td>
+              <td><?= $data->id ?></td>
               <td><?= date("d/m/Y",strtotime($data->tgl)); ?></td>
-              <td><?= $data->suplier ?></td>
+              <td><?= $data->customer ?></td>
               <td><?= $data->status ?></td>
               <td><?= $hutang ?></td>
               <td><?= $jatuh_tempo; ?></td>
               <td><?= $data->kasir ?></td>
-              <td><?= number_format($data->total_hbeli) ?></td>
+              <td><?= number_format($data->total_harga) ?></td>
             </tr>
           <?php $no++; } ?>
           </tbody>
@@ -100,13 +101,13 @@ $query = $connect->query("SELECT * FROM data_toko");
             <tr>
               <td colspan="5" class="text-center"><b>Total</b></td>
               <td><b><?= number_format($total_hutang) ?></b></td>
-              <td colspan="2"></td>
+              <td></td>
+              <td></td>
               <td><b><?= number_format($total) ?></b></td>
             </tr>
           </tfoot>
         </table>
-
-       <table align="left">
+        <table align="left">
            <tr>
                <td>
                 <?php 

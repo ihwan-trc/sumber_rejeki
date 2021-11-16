@@ -48,7 +48,7 @@ if (isset($_GET['status'])) {
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>No.Struk</th>
+                      <th>No.Transaksi</th>
                       <th>Tanggal </th>
                       <th>Total</th>
                       <th>Status</th>

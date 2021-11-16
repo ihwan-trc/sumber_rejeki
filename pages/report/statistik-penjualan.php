@@ -3,72 +3,12 @@
     <h5 class="m-0 font-weight-bold text-primary">Laporan Penjualan</h5>
   </div><br>
   <div class="card-body" >
-      <!-- <h5><b>Filter Sesuai Priode : </b></h5> -->
-      <form action="#"  method="POST">    
-      <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <label class="control-label col-md-4 col-sm-3 col-xs-12" for="first-name"> Tanggal Mulai <span class="required" ></span></label>
-          <div class="col-md-12 col-sm-6 col-xs-12">
-            <div class="input-group">
-              <?php $date  = date('Y-m-01'); ?>
-              <?php if (isset($_POST['cari'])) { ?>
-              <input type="date" value="<?php echo $_POST['awal'] ?>" class="form-control" name="awal" style="border-top-left-radius :  5px; border-bottom-left-radius :  5px; font-size: 14px;">
-              <span class="input-group-btn">
-                <div  class="btn btn-primary" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 14px"><span class="fa fa-calendar"></span>
-                </div>
-              </span>
-              <?php }else { ?>
-              <input type="date" value="<?php echo $date ?>" class="form-control" name="awal" style="border-top-left-radius :  5px; border-bottom-left-radius :  5px; font-size: 14px;">
-              <span class="input-group-btn">
-                <div  class="btn btn-primary" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 14px"><span class="fa fa-calendar"></span>
-                </div>
-              </span>
-              <?php } ?>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <label class="control-label col-md-4 col-sm-3 col-xs-12" for="first-name"> Tanggal Akhir <span class="required" ></span></label>
-              <?php 
-                $calender = CAL_GREGORIAN;
-                $bulan = date('m');
-                $thn   = date('Y');
-                $total =  cal_days_in_month($calender, $bulan, $thn);
-
-
-                $date1 = date('Y-m-'.$total);
-
-               ?>
-          <div class="col-md-12 col-sm-6 col-xs-12">
-            <div class="input-group">
-
-              <?php if (isset($_POST['cari'])) { ?>
-              <input type="date" class="form-control" value="<?php echo $_POST['akhir'] ?>" name="akhir" style="border-top-left-radius :  5px; border-bottom-left-radius :  5px; font-size: 14px;"> 
-              <span class="input-group-btn">
-                <div  class="btn btn-primary" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 14px"><span class="fa fa-calendar">
-              <?php }else { ?>
-              <input type="date" class="form-control" value="<?php echo $date1 ?>" name="akhir" style="border-top-left-radius :  5px; border-bottom-left-radius :  5px; font-size: 14px;"> 
-              <span class="input-group-btn">
-                <div  class="btn btn-primary" style="border-bottom-right-radius : 5px; border-bottom-left-radius : 0px;border-top-left-radius : 0px; font-size: 14px"><span class="fa fa-calendar">
-                <?php } ?>
-                </div> 
-                <button type="submit" name='cari' class="btn btn-danger btn-sm" name="" style="font-size: 16px"><span class="fa fa-search"> Cari Data</span></button></span></span><span>
-              </span> 
-          </div>
-          </div>
-        </div>
-      </div>
-      </div>
-      <hr>
-      
-      </form>
-       <?php if (isset($_POST['cari'])) { $awal = $_POST['awal']; $akhir = $_POST['akhir'];
-                echo'
-                   <h4 class="text-center">Laporan Statistik Penjualan</h4>
-                   <h5 class="text-center" style="font-size:14px">'. tgl_indo($_POST["awal"]) .' - '. tgl_indo($_POST['akhir']) .' </h5>'; 
+       <?php if (isset($_POST['statistik'])) { 
+        $awal = $_POST['awal']; 
+        $akhir = $_POST['akhir'];
+          echo'
+              <h4 class="text-center">Laporan Statistik Penjualan</h4>
+              <h5 class="text-center" style="font-size:14px">'. tgl_indo($_POST["awal"]) .' - '. tgl_indo($_POST['akhir']) .' </h5>'; 
         ?>
         <?php 
         $nama    = $connect->query("SELECT nama FROM statis_lap WHERE tgl BETWEEN '$awal' AND '$akhir' "); 
@@ -83,11 +23,11 @@
         <table class="table" id="datatable" style="font-size: 12px">
           <thead>
             <tr>
-              <th width="2%">No</th>
-              <th width="9%">Kode Barang</th>
-              <th width="50%">Nama Barang</th>
-              <th width="12%">Jumlah Transaksi</th>
-              <th width="10%">Jumlah Terjual</th>
+              <th class="text-center">No</th>
+              <th>Barcode</th>
+              <th>Nama Barang</th>
+              <th>Jumlah Transaksi</th>
+              <th>Jumlah Terjual</th>
             </tr>
           </thead>
           <tbody>
@@ -99,10 +39,10 @@
               echo '     
                 <tr>
                   <td align="center">'.$no++.'</td> 
-                  <td>'.$dt->kode.'</td> 
+                  <td>'.$dt->barcode.'</td> 
                   <td>'.$dt->nama.'</td> 
-                  <td align="center">'.$dt->total_terjual.'</td> 
-                  <td align="center">'.$dt->jumlah.'</td> 
+                  <td>'.$dt->total_terjual.'</td> 
+                  <td>'.$dt->jumlah.'</td> 
                 </tr>';
           } ?>
           </tbody>

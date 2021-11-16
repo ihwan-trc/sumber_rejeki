@@ -622,33 +622,21 @@
 
     }elseif ($_GET['act']=='up-pengaturan') {
         $nama     = $_POST['nama'];
+        $title    = $_POST['nama'];
         $telp     = $_POST['telp'];
         $alamat   = $_POST['alamat'];
         $info     = $_POST['info'];
-        $so       = $_POST['so'];
-        $edit     = $_POST['edit'];
+        $so       = 'Buka';
+        $edit     = 'buka';
 
-        echo $nama ."<br>";
-        echo $telp ."<br>";
-        echo $alamat ."<br>";
-        echo $info ."<br>";
-        echo $so ."<br>";
-        echo $edit ."<br>";
-        if (empty($edit)) {
-
-        } else {
-            $connect->query("UPDATE barang SET edit = '$edit' ");
-        }
-
-
-
-        $sql = $connect->query("UPDATE data_apotek SET
+        $sql = $connect->query("UPDATE data_toko SET
+            title   = '$title',
             nama    = '$nama',
             alamat  = '$alamat',
             telp    = '$telp',
             so      = '$so',
-            info    = '$info'
-
+            info    = '$info',
+            edit_barang = '$edit'
         ");
 
         if ($sql) {

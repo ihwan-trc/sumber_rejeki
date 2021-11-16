@@ -73,7 +73,7 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary  mb-3">Penjualan Anda Hari Ini</div>
+                      <div class="font-weight-bold text-danger  mb-3">Pendapatan</div>
                       <?php if ($_SESSION['level']=='Admin') {
                          $sql = $connect->query("SELECT SUM(total_harga) AS total FROM penjualan WHERE tgl=CURDATE()");
                       } else {
@@ -95,21 +95,14 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary mb-3">Penjualan Anda Bulan Ini</div>
+                      <div class="font-weight-bold text-primary mb-3">Pembelian</div>
                       <?php 
-                        if ($_SESSION['level']=='Admin') {
-                      $sql = $connect->query("SELECT CONCAT(YEAR(tgl),'/',MONTH(tgl)) AS tahun_bulan, SUM(total_harga) AS total FROM penjualan WHERE CONCAT(YEAR(tgl),'/',MONTH(tgl))=CONCAT(YEAR(NOW()),'/',MONTH(NOW())) GROUP BY YEAR(tgl),MONTH(tgl)");
-
-                        } else {
-                          # code...
-                      $sql = $connect->query("SELECT CONCAT(YEAR(tgl),'/',MONTH(tgl)) AS tahun_bulan, SUM(total_harga) AS total FROM penjualan WHERE CONCAT(YEAR(tgl),'/',MONTH(tgl))=CONCAT(YEAR(NOW()),'/',MONTH(NOW())) AND kasir = '$user' GROUP BY YEAR(tgl),MONTH(tgl)");
-                        }
-                        
-
+                        $sql = $connect->query("SELECT CONCAT(YEAR(tgl),'/',MONTH(tgl)) AS tahun_bulan, SUM(total_hbeli) AS total FROM pembelian WHERE CONCAT(YEAR(tgl),'/',MONTH(tgl))=CONCAT(YEAR(NOW()),'/',MONTH(NOW())) GROUP BY YEAR(tgl),MONTH(tgl)");
                         $data = $sql->fetch_object();
-                      
-                      { echo '
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. '.number_format($data->total).'</div>'; } ?>
+                        { 
+                          echo '<div class="h5 mb-0 font-weight-bold text-info-800">Rp. '.number_format($data->total).'</div>';
+                        }
+                      ?>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -125,11 +118,14 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary mb-3">Kadaluarsa Bulan Ini</div>
-                      <?php $tgl = date('m'); $thn = date('Y'); 
-                            $sql  = $connect->query("SELECT COUNT(kode) AS total FROM barang WHERE MONTH(expired) = '$tgl' AND YEAR(expired)='$thn' ");
-                            $data = $sql->fetch_object(); { echo '
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">'. number_format($data->total).' Data</div>'; } ?>
+                      <div class="font-weight-bold text-success mb-3">Penjualan</div>
+                      <?php 
+                        $sql = $connect->query("SELECT CONCAT(YEAR(tgl),'/',MONTH(tgl)) AS tahun_bulan, SUM(total_harga) AS total FROM penjualan WHERE CONCAT(YEAR(tgl),'/',MONTH(tgl))=CONCAT(YEAR(NOW()),'/',MONTH(NOW())) GROUP BY YEAR(tgl),MONTH(tgl)");
+                        $data = $sql->fetch_object();
+                        { 
+                          echo '<div class="h5 mb-0 font-weight-bold text-info-800">Rp. '.number_format($data->total).'</div>';
+                        }
+                      ?>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -145,10 +141,10 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-warning mb-3">Total Suplier</div>
-                      <?php $sql = $connect->query("SELECT COUNT(kode) AS total FROM suplier"); 
+                      <div class="font-weight-bold text-warning mb-3">Total Barang</div>
+                      <?php $sql = $connect->query("SELECT COUNT(kode) AS total FROM barang"); 
                             $data = $sql->fetch_object(); { echo '
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">'.$data->total.' Suplier</div>'; } ?>
+                      <div class="h5 mb-0 font-weight-bold text-info-800">'.$data->total.' Item</div>'; } ?>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-user fa-2x text-gray-300"></i>
