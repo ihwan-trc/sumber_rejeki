@@ -387,7 +387,7 @@
          if (isset($_POST['simpan'])) {
             echo "<meta http-equiv='refresh' content='0; url=../home?p=form-penjualan&&status=sukses'>";
          }elseif (isset($_POST['simpan_cetak'])) {
-            echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans'>";
+            echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans&status=$status'>";
          }
 
     }elseif ($_GET['act']=='delete-penjualan') {
@@ -577,7 +577,7 @@
          if (isset($_POST['simpan'])) {
             echo "<meta http-equiv='refresh' content='0; url=../home?p=form-pembelian&&status=sukses'>";
          }elseif (isset($_POST['simpan_cetak'])) {
-            echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans'>";
+            echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans&status=$status'>";
          }
     }elseif ($_GET['act']=='delete-pembelian') {
         $kode_trans = $_POST['id'];

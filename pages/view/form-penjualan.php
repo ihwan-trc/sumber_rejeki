@@ -56,7 +56,7 @@ if (isset($_GET['status'])) {
         <table class="font-weight-bold">
           <tr>
             <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">No.Transaksi</td>
-            <td class="text-danger" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:&nbsp;&nbsp;<?php echo "$kode".$dt->count+1; ?></td>
+            <td class="text-danger" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">&nbsp;&nbsp;:&nbsp;&nbsp;<?php echo "$kode".($dt->count+1); ?></td>
           </tr>
           <tr>
             <td style="border-top-left-radius: 5px;border-bottom-left-radius: 5px; font-size: 12px;">Tanggal</td>
@@ -184,7 +184,7 @@ if (isset($_GET['status'])) {
                 <label class="control-label col-md-9 col-sm-3 col-xs-12"> Grand Total <span class="required"></span></label>
                   <div class="col-md-12">
                     <input type="text" name="input_total" id="input-total" required="required" class="form-control" style="color : red; font-size: 12px" readonly value=" "/>
-                    <input type="hidden" name="kode_trans" value="<?php echo "$kode".$dt->count+1; ?>"/>
+                    <input type="hidden" name="kode_trans" value="<?php echo "$kode".(($dt->count+1)); ?>"/>
                   </div>
               </div>
               <div class="form-group mb-0">

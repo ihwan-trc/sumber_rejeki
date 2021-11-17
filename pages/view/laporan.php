@@ -56,15 +56,15 @@
                 <div class="hpanel widget-int-shape responsive-mg-b-30 res-tablet-mg-t-30 dk-res-t-pro-30">
                     <div class="panel-body">
                         <div class="text-center content-box">
-                            <h2 class="m-b-xs">Pendapatan</h2>
+                            <h2 class="m-b-xs">Statistik Penjualan</h2>
                             <p class="font-bold"></p>
                             <div class="m icon-box">
-                                <i class="fa fa-comment-dollar"></i>
+                                <i class="fa fa-bar-chart"></i>
                             </div>
                             <p class="small mg-t-box">
-                                Informasi Pendapatan.
+                                Informasi Statistik Penjualan.
                             </p>
-                            <a href="?p=report-pendapatan" class="btn btn-primary widget-btn-4 btn-sm" style="color : white">Lihat Laporan</a>
+                            <a href="#" class="btn btn-warning widget-btn-4 btn-sm" data-toggle="modal" data-target="#modalStatistik" style="color : white">Lihat Laporan</a>
                         </div>
                     </div>
                 </div>
@@ -103,23 +103,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 card shadow mb-4">
-                <div class="hpanel widget-int-shape responsive-mg-b-30 res-tablet-mg-t-30 dk-res-t-pro-30">
-                    <div class="panel-body">
-                        <div class="text-center content-box">
-                            <h2 class="m-b-xs">Statistik Penjualan</h2>
-                            <p class="font-bold"></p>
-                            <div class="m icon-box">
-                                <i class="fa fa-bar-chart"></i>
-                            </div>
-                            <p class="small mg-t-box">
-                                Informasi Statistik Penjualan.
-                            </p>
-                            <a href="#" class="btn btn-warning widget-btn-4 btn-sm" data-toggle="modal" data-target="#modalStatistik" style="color : white">Lihat Laporan</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>

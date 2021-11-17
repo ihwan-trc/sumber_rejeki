@@ -3,7 +3,7 @@
 
 <?php 
 	$get_struk = $_GET['kode'];
-		$status = $_GET['status'];
+	$status = $_GET['status'];
 
 	if ($status == "Belum Lunas") {
 		$kmbli = "Kekurangan";

@@ -256,7 +256,7 @@
         if (isset($_POST['simpan'])) {
             echo "<meta http-equiv='refresh' content='0; url=../home?p=penjualan&status=sukses'>";
         }elseif (isset($_POST['simpan_cetak'])) {
-            echo "<meta http-equiv='refresh' content='0; url=../home?p=penjualan&status=sukses&kode=$kode_trans'>";
+            echo "<meta http-equiv='refresh' content='0; url=../pages/view/struk?kode=$kode_trans&status=$status''>";
         }
     }
  ?>

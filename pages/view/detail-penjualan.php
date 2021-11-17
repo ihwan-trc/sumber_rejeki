@@ -33,7 +33,7 @@
         </table>
       </div>
       <div class="float-right">
-          <a href="pages/view/struk?kode=<?= $id ?>&status=<?= $dt->status ?>"  class="btn btn-primary btn-sm">
+          <a href="pages/view/struk?kode=<?= $id ?>&status=<?= $dt->status ?>" target="blank" class="btn btn-primary btn-sm">
             <i class="fa fa-print"> </i> Cetak Transaksi
           </a>
       </div>

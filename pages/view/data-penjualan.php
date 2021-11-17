@@ -90,7 +90,7 @@ if (isset($_GET['status'])) {
                       <td><?= $data->customer ?></td>
                       <td class="text-center">
                         <div class="row">
-                          <a href="pages/view/struk?kode=<?= $data->id ?>&status=<?= $data->status ?>" class='btn btn-primary btn-sm'  title="Cetak">
+                          <a href="pages/view/struk?kode=<?= $data->id ?>&status=<?= $data->status ?>" target="blank" class='btn btn-primary btn-sm'  title="Cetak">
                             <span class='fa fa-print'></span>
                           </a> &nbsp;
                           <form action="action/actionjual?act=edit-cart-penjualan" method="POST" name="form_penjualan">

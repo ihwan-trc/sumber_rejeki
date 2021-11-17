@@ -13,7 +13,7 @@
         <h5 class="font-weight-bold text-primary">Detail Transaksi Pembelian</h5>
       </div>
       <div class="mt-3">
-        <a href="pages/view/struk_pembelian?kode=<?= $id ?>&status=<?= $status ?>"  class="btn btn-primary btn-sm">
+        <a href="pages/view/struk_pembelian?kode=<?= $id ?>&status=<?= $status ?>" target="blank" class="btn btn-primary btn-sm">
           <i class="fa fa-print"> </i> Cetak Transaksi
         </a>
       </div>

@@ -1,5 +1,10 @@
 <?php 
   session_start();
+  error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+  $uri_path = "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $uri_segments = explode('/', $uri_path);
+  $uri_segments[4];
+
   include 'config.php';
   if(!isset($_SESSION['username'])){
     die(
@@ -121,7 +126,7 @@
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
+      <li class="nav-item <?php if ($uri_segments[4] == "home?p=dashboard") {echo 'active';} ?>">
         <a class="nav-link" href="?p=dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
@@ -137,23 +142,37 @@
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item 
+        <?php
+          if ($uri_segments[4] == "home?p=barang") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=suplier") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=satuan") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=kategori") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=importbarang") {echo 'active';}
+        ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fa fa-database"></i>
           <span>Master Data</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="?p=barang">Data Barang</a>
-            <a class="collapse-item" href="?p=suplier">Data Suplier</a>
-            <a class="collapse-item" href="?p=satuan">Data Satuan</a>
-            <a class="collapse-item" href="?p=kategori">Data Kategori</a>
+            <a class="collapse-item <?php if ($uri_segments[4] == "home?p=barang") {echo 'active';} ?>" href="?p=barang">Data Barang</a>
+            <a class="collapse-item <?php if ($uri_segments[4] == "home?p=suplier") {echo 'active';} ?>" href="?p=suplier">Data Suplier</a>
+            <a class="collapse-item <?php if ($uri_segments[4] == "home?p=satuan") {echo 'active';} ?>" href="?p=satuan">Data Satuan</a>
+            <a class="collapse-item <?php if ($uri_segments[4] == "home?p=kategori") {echo 'active';} ?>" href="?p=kategori">Data Kategori</a>
+            <a class="collapse-item <?php if ($uri_segments[4] == "home?p=importbarang") {echo 'active';} ?>" href="?p=importbarang">Import Data Barang</a>
           </div>
         </div>
       </li>
 
       <!-- Nav Item - Utilities Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item
+        <?php
+            if ($uri_segments[4] == "home?p=penjualan") {echo 'active';}
+            elseif ($uri_segments[4] == "home?p=pembelian") {echo 'active';}
+            elseif ($uri_segments[4] == "home?p=form-penjualan") {echo 'active';}
+            elseif ($uri_segments[4] == "home?p=form-pembelian") {echo 'active';}
+          ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
           aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-exchange-alt"></i>
@@ -162,10 +181,46 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
           data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="?p=penjualan">Penjualan</a>
-            <a class="collapse-item" href="?p=pembelian">Pembelian</a>
+            <a class="collapse-item <?php if ($uri_segments[4] == "home?p=penjualan") {echo 'active';}elseif ($uri_segments[4] == "home?p=form-penjualan") {echo 'active';} ?>" href="?p=penjualan">Penjualan</a>
+
+            <a class="collapse-item <?php if ($uri_segments[4] == "home?p=pembelian") {echo 'active';}elseif ($uri_segments[4] == "home?p=form-pembelian") {echo 'active';} ?>" href="?p=pembelian">Pembelian</a>
           </div>
         </div>
+      </li>
+
+      <!-- <li class="nav-item
+        <?php
+          if ($uri_segments[4] == "home?p=stok-opname") {echo 'active';}
+        ?>">
+        <a class="nav-link
+        <?php if ($uri_segments[4] == "home?p=stok-opname") {echo 'active';}?>" href="?p=stok-opname">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Stok opname</span>
+        </a>
+      </li> -->
+
+      <li class="nav-item
+        <?php
+          if ($uri_segments[4] == "home?p=report") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-pembelian") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-penjualan") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-stok-barang") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-statistik-penjualan") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-hutangbeli") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-hutangjual") {echo 'active';}
+        ?>">
+        <a class="nav-link
+        <?php 
+          if ($uri_segments[4] == "home?p=report") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-pembelian") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-penjualan") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-stok-barang") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-statistik-penjualan") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-hutangbeli") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=report-hutangjual") {echo 'active';} ?>" href="?p=report">
+          <i class="fas fa-chart-area"></i>
+          <span>Laporan</span>
+        </a>
       </li>
 
       <!-- Divider -->
@@ -175,23 +230,13 @@
       <div class="sidebar-heading">
           Addons
       </div>
-
-      <li class="nav-item">
-        <a class="nav-link" href="?p=stok-opname">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Stok opname</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="?p=report">
-          <i class="fas fa-chart-area"></i>
-          <span>Laporan</span>
-        </a>
-      </li>
-
+      
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item
+        <?php
+          if ($uri_segments[4] == "home?p=pengaturan") {echo 'active';}
+          elseif ($uri_segments[4] == "home?p=user") {echo 'active';}
+        ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
           aria-expanded="true" aria-controls="collapsePages">
           <i class="fas fa-fw fa-cog fa-spin"></i>
@@ -199,8 +244,10 @@
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="?p=pengaturan">Data Toko</a>
-            <a class="collapse-item" href="?p=user">User</a>
+            <a class="collapse-item
+            <?php if ($uri_segments[4]=="home?p=pengaturan") {echo 'active';} ?>" href="?p=pengaturan">Data Toko</a>
+            <a class="collapse-item
+            <?php if ($uri_segments[4]=="home?p=user") {echo 'active';} ?>" href="?p=user">User</a>
           </div>
         </div>
       </li>
@@ -322,6 +369,9 @@
 
           }elseif ($getpage == 'kategori') {
               include 'pages/view/data-kategori.php';
+
+          }elseif ($getpage == 'importbarang') {
+              include 'pages/view/importbarang.php';
           
           }elseif ($getpage == 'satuan') {
               include 'pages/view/data-satuan.php';

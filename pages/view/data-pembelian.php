@@ -102,7 +102,7 @@ if (isset($_GET['status'])) {
                       <td><?= $data->suplier ?></td>
                       <td class="text-center">
                         <div class="row">
-                          <a href="pages/view/struk_pembelian?kode=<?= $data->id ?>&status=<?= $data->status ?>" class='btn btn-primary btn-sm'  title="Cetak">
+                          <a href="pages/view/struk_pembelian?kode=<?= $data->id ?>&status=<?= $data->status ?>" target="blank" class='btn btn-primary btn-sm'  title="Cetak">
                             <span class='fa fa-print'></span>
                           </a> &nbsp;
                           <form action="action/actionbeli?act=edit-cart-pembelian" method="POST" name="form_pembelian">

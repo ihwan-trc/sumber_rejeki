@@ -1,5 +1,6 @@
 <?php
 error_reporting(0);
+$tgl = date("Y-m-d");
 // FUNGSI BULAN DALAM BAHASA INDONESIA
 function bulan($bln){
 $bulan = $bln;
@@ -61,7 +62,6 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
           </div>
 
           <!-- Content Row -->
@@ -69,35 +69,13 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
 
             <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="font-weight-bold text-danger  mb-3">Pendapatan</div>
-                      <?php if ($_SESSION['level']=='Admin') {
-                         $sql = $connect->query("SELECT SUM(total_harga) AS total FROM penjualan WHERE tgl=CURDATE()");
-                      } else {
-                         $sql = $connect->query("SELECT SUM(total_harga) AS total FROM penjualan WHERE kasir = '$user' AND tgl=CURDATE()");
-                      }
-                            $dt  = $sql->fetch_object(); { echo ' 
-                      <div class="h5 mb-0 font-weight-bold text-info-800">Rp. '.number_format($dt->total).' </div>'; } ?>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6 mb-4">
               <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="font-weight-bold text-primary mb-3">Pembelian</div>
+                      <div class="font-weight-bold text-primary mb-3">Penjualan Hari Ini</div>
                       <?php 
-                        $sql = $connect->query("SELECT CONCAT(YEAR(tgl),'/',MONTH(tgl)) AS tahun_bulan, SUM(total_hbeli) AS total FROM pembelian WHERE CONCAT(YEAR(tgl),'/',MONTH(tgl))=CONCAT(YEAR(NOW()),'/',MONTH(NOW())) GROUP BY YEAR(tgl),MONTH(tgl)");
+                        $sql = $connect->query("SELECT SUM(total_harga) AS total FROM penjualan WHERE tgl='$tgl'");
                         $data = $sql->fetch_object();
                         { 
                           echo '<div class="h5 mb-0 font-weight-bold text-info-800">Rp. '.number_format($data->total).'</div>';
@@ -114,13 +92,66 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
 
             <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="font-weight-bold text-info  mb-3">Laba Hari Ini</div>
+                      <?php 
+                        $query1 = $connect->query("SELECT * FROM penjualan LEFT JOIN detail ON penjualan.id=detail.id WHERE penjualan.tgl='$tgl'");
+                        while ($data1=$query1->fetch_object()) {
+                          $kode_barang = $data1->kode_barang;
+                          $hjual = $data1->harga;
+                          $qty = $data1->qty;
+
+                          $query2 = $connect->query("SELECT * FROM barang WHERE kode=$kode_barang");
+                          while ($data2=$query2->fetch_object()) {
+                            $kode = $data2->kode;
+                            $beli = $data2->beli;
+                            $p1 = $hjual - $beli;
+                            $pendapatan = $p1 * $qty;
+                            $hariini += $pendapatan;
+                          }
+                        }
+                        echo '<div class="h5 mb-0 font-weight-bold text-info-800">Rp. '.number_format($hariini).'</div>';
+                      ?>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="font-weight-bold text-warning mb-3">Total Barang Terjual</div>
+                      <?php $sql = $connect->query("SELECT SUM(qty) AS total FROM detail"); 
+                            $data = $sql->fetch_object(); { echo '
+                      <div class="h5 mb-0 font-weight-bold text-info-800">'.$data->total.' Item</div>'; } ?>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-user fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
               <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="font-weight-bold text-success mb-3">Penjualan</div>
+                      <div class="font-weight-bold text-success mb-3">Total Penjualan</div>
                       <?php 
-                        $sql = $connect->query("SELECT CONCAT(YEAR(tgl),'/',MONTH(tgl)) AS tahun_bulan, SUM(total_harga) AS total FROM penjualan WHERE CONCAT(YEAR(tgl),'/',MONTH(tgl))=CONCAT(YEAR(NOW()),'/',MONTH(NOW())) GROUP BY YEAR(tgl),MONTH(tgl)");
+                        $sql = $connect->query("SELECT SUM(total_harga) AS total FROM penjualan");
                         $data = $sql->fetch_object();
                         { 
                           echo '<div class="h5 mb-0 font-weight-bold text-info-800">Rp. '.number_format($data->total).'</div>';
@@ -134,25 +165,7 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
                 </div>
               </div>
             </div>
-
-            <!-- Pending Requests Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="font-weight-bold text-warning mb-3">Total Barang</div>
-                      <?php $sql = $connect->query("SELECT COUNT(kode) AS total FROM barang"); 
-                            $data = $sql->fetch_object(); { echo '
-                      <div class="h5 mb-0 font-weight-bold text-info-800">'.$data->total.' Item</div>'; } ?>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-user fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </div>
 
           <!-- Content Row -->
@@ -164,7 +177,7 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Statistik Pendapatan Anda</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Statistik Penjualan</h6>
                   <div class="dropdown no-arrow">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -187,7 +200,7 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
             var ctx = document.getElementById("myChart");
             var myChart = new Chart(ctx, {
             animationEnabled: true,
-  exportEnabled: true,
+            exportEnabled: true,
   // theme: "light1", // "light1", "light2", "dark1", "dark2"
 
 
@@ -335,7 +348,7 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
             <div class="col-xl-4 col-lg-5">
               <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Data Transaksi</h6>
                   <div class="dropdown no-arrow">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -356,16 +369,34 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
                   </div>
                   <div class="mt-4 text-center small">
                     <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> Direct
+                      <i class="fas fa-circle text-primary"></i> Pembelian
                     </span>
                     <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> Direct
+                      <i class="fas fa-circle text-success"></i> Penjualan
+                    </span>
+                    <span class="mr-2">
+                      <i class="fas fa-circle text-info"></i> Hutang
                     </span>
 
                   </div>
                 </div>
               </div>
             </div>
+<?php 
+    $hutang_beli = $connect->query("SELECT SUM(total_hbeli) AS total FROM pembelian WHERE status='Belum Lunas'");
+    while ($data = $hutang_beli->fetch_object()) {
+      $hutangbeli = $data->total;
+    }
+    $jual = $connect->query("SELECT SUM(total_harga) AS total FROM penjualan");
+    while ($data = $jual->fetch_object()) {
+      $penjualan = $data->total;
+    }
+    $beli = $connect->query("SELECT SUM(total_hbeli) AS total FROM pembelian");
+    while ($data = $beli->fetch_object()) {
+      $pembelian = $data->total;
+    }
+
+?>
           <script type="text/javascript">
             Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
             Chart.defaults.global.defaultFontColor = '#858796';
@@ -375,9 +406,9 @@ $penghasilan = $connect->query("SELECT SUM(total_harga) AS total_penjualan FROM 
             var myPieChart = new Chart(ctx, {
               type: 'doughnut',
               data: {
-                labels: ["Direct", "Referral", "Social"],
+                labels: ["Pembelian", "Penjualan", "Hutang"],
                 datasets: [{
-                  data: [55, 30, 15],
+                  data: [<?= '"'.$pembelian .'","'.$penjualan .'","'.$hutangbeli.'"';?>],
                   backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
                   hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
                   hoverBorderColor: "rgba(234, 236, 244, 1)",
