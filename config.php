@@ -1,5 +1,10 @@
 <?php
 
+// $servername = "localhost";
+// $database 	= "dbiantec_sumber_rejeki";
+// $username 	= "dbiantec";
+// $password 	= "8i8w6pAH0*:PnW";
+
 $servername = "localhost";
 $database 	= "db_sumber_rejeki";
 $username 	= "root";

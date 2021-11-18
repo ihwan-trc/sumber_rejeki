@@ -17,8 +17,6 @@ $ex	  = $data->fetch_object();
 // menghitung jumlah data yang ditemukan
  $cek = $data->num_rows;
 
-	echo $cek;
-
 
 if($cek > 0){
 	$_SESSION['username'] = $username;
