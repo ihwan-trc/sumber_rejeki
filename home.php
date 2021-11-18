@@ -252,6 +252,17 @@
         </div>
       </li>
 
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item
+        <?php if ($uri_segments[4] == "home?p=petunjuk") {echo 'active';} ?>">
+        <a class="nav-link
+        <?php 
+          if ($uri_segments[4] == "home?p=petunjuk") {echo 'active';} ?>" href="?p=petunjuk">
+          <i class="fas fa-question"></i>
+          <span>Petunjuk</span>
+        </a>
+      </li>
+
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -435,6 +446,9 @@
 
           }elseif ($getpage == 'form-edit-penjualan') {
               include 'pages/view/form-edit-penjualan.php';
+
+          }elseif ($getpage == 'petunjuk') {
+              include 'pages/view/petunjuk.php';
 
           }else 
               include '404.php'

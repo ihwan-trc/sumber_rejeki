@@ -214,7 +214,7 @@
               </div>
 
               <div class="form-group mb-0" id="kurang">
-                <label class="control-label col-md-9 col-sm-3 col-xs-12" for="first-name"> Kekurangan <span class="required"></span></label>
+                <label class="control-label col-md-9 col-sm-3 col-xs-12" for="first-name"> Kembalian <span class="required"></span></label>
                   <div class="col-md-12">
                     <input type="text" name="input_kembali" id="input-kembali" required="required" class="form-control" readonly style="color : red; font-size: 12px"/>
                   </div>
@@ -343,9 +343,13 @@
         if($(this).is(':checked')) {
           bayar.show();
           bayar.find('input').attr('required', true);
+          kurang.show();
+          kurang.find('input').attr('required', true);
         } else {
           bayar.hide();
           bayar.find('input').attr('required', false);
+          kurang.hide();
+          kurang.find('input').attr('required', false);
         }
     })
     cek_hutang.on('click', function() {

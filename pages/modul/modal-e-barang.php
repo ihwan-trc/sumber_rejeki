@@ -68,7 +68,7 @@ $level = $_SESSION['level'];
           </div>
           <div class="col-md-4">
             <label for="exampleFormControlInput1">Stok</label>
-            <input class="form-control" onkeyup="convertToRupiah(this);" style="font-size: 12px" name="stok" value="<?= $dt->stok ?>">
+            <input class="form-control" onkeyup="convertToRupiah(this);" style="font-size: 12px" name="stok" value="<?= $dt->stok ?>" readonly>
           </div>
         <?php if ($level == 'Admin') { ?>
           <!-- <div class="col-md-4">

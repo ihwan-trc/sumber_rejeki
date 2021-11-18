@@ -90,17 +90,14 @@ if (isset($_GET['status'])) {
 
             // Cek apakah file yang diupload adalah file Excel 2007 (.xlsx)
             if($ext == "xlsx"){
-              // Upload file yang dipilih ke folder tmp
               move_uploaded_file($tmp_file, 'asset/lib/tmp/'.$nama_file_baru);
 
               $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-              $spreadsheet = $reader->load('asset/lib/tmp/' . $nama_file_baru); // Load file yang tadi diupload ke folder tmp
+              $spreadsheet = $reader->load('asset/lib/tmp/' . $nama_file_baru);
               $sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 
-              // Buat sebuah tag form untuk proses import data ke database
-              echo "<form method='post' action='page/barang/proses_import.php'>";
-              // Buat sebuah tombol untuk mengimport data ke database
-                echo "<button type='submit' name='import_barang' class='btn btn-sm btn-primary'>
+              echo "<form method='post' action='pages/view/proses_import.php'>";
+              echo "<button type='submit' name='import_barang' class='btn btn-sm btn-primary'>
                 <i class='fas fa-upload'></i> Import</button>";
               echo "<br>";
               echo "<br>";
@@ -109,51 +106,64 @@ if (isset($_GET['status'])) {
                 <th colspan='5' class='text-center'>Preview Data</th>
               </tr>
               <tr>
-                <th class='text-center'>NO</th>
-                <th class='text-center'>NIS</th>
-                <th class='text-center'>NAMA barang</th>
-                <th class='text-center'>KELAS</th>
-                <th class='text-center'>JURUSAN</th>
+                <th class='text-center'>No</th>
+                <th class='text-center'>Barcode</th>
+                <th class='text-center'>Nama Barang</th>
+                <th class='text-center'>Supplier</th>
+                <th class='text-center'>Kategori</th>
+                <th class='text-center'>Satuan</th>
+                <th class='text-center'>Harga Beli</th>
+                <th class='text-center'>Harga Jual</th>
+                <th class='text-center'>Stok</th>
               </tr>";
               $numrow = 1;
               $kosong = 0;
               $no = 1;
               foreach($sheet as $row){ // Lakukan perulangan dari data yang ada di excel
                 // Ambil data pada excel sesuai Kolom
-                $nis = $row['A'];
+                $barcode = $row['A'];
                 $nama_barang = $row['B'];
-                $kelas = $row['C'];
-                $jurusan = $row['D'];
+                $suplier = $row['C'];
+                $kategori = $row['D'];
+                $satuan = $row['E'];
+                $harga_beli = $row['F'];
+                $harga_jual = $row['G'];
+                $stok = $row['H'];
 
                 // Cek jika semua data tidak diisi
-                if($nis == "" && $nama_barang == "" && $kelas == ""  && $jurusan == "")
-                  continue; // Lewat data pada baris ini (masuk ke looping selanjutnya / baris selanjutnya)
+                if($barcode == "" && $nama_barang == "" && $suplier == ""  && $kategori == "" && $satuan == "" && $harga_beli == "" && $harga_jual == "" && $stok == "")
+                  continue;
 
-                // Cek $numrow apakah lebih dari 1
-                // Artinya karena baris pertama adalah nama-nama kolom
-                // Jadi dilewat saja, tidak usah diimport
                 if($numrow > 1){
                   // Validasi apakah semua data telah diisi
-                  $nis_td = ( ! empty($nis))? "" : " style='background: #E07171;'"; // Jika nis kosong, beri warna merah
-                  $nama_barang_td = ( ! empty($nama_barang))? "" : " style='background: #E07171;'"; // Jika Nama kosong, beri warna merah
-                  $kelas_td = ( ! empty($kelas))? "" : " style='background: #E07171;'"; // Jika kelas Kelamin kosong, beri warna merah
-                  $jurusan_td = ( ! empty($jurusan))? "" : " style='background: #E07171;'"; // Jika kelas Kelamin kosong, beri warna merah
+                  $barcode_td = ( ! empty($barcode))? "" : " style='background: #E07171;'";
+                  $nama_barang_td = ( ! empty($nama_barang))? "" : " style='background: #E07171;'";
+                  $suplier_td = ( ! empty($suplier))? "" : " style='background: #E07171;'"; 
+                  $kategori_td = ( ! empty($kategori))? "" : " style='background: #E07171;'"; 
+                  $satuan_td = ( ! empty($satuan))? "" : " style='background: #E07171;'";
+                  $harga_beli_td = ( ! empty($harga_beli))? "" : " style='background: #E07171;'";
+                  $harga_jual_td = ( ! empty($harga_jual))? "" : " style='background: #E07171;'";
+                  $stok_td = ( ! empty($stok))? "" : " style='background: #E07171;'";
                   
                   // Jika salah satu data ada yang kosong
-                  if($nis == "" or $nama_barang == "" or $kelas == "" or $jurusan == ""){
+                  if($barcode == "" or $nama_barang == "" or $suplier == "" or $kategori == "" or $satuan == "" or $harga_beli == "" or $harga_jual == "" or $stok == ""){
                     $kosong++; // Tambah 1 variabel $kosong
                   }
 
                   echo "<tr>";
                   echo "<td class='text-center'>".$no++."</td>";
-                  echo "<td".$nis_td.">".$nis."</td>";
+                  echo "<td".$barcode_td.">".$barcode."</td>";
                   echo "<td".$nama_barang_td.">".$nama_barang."</td>";
-                  echo "<td".$kelas_td.">".$kelas."</td>";
-                  echo "<td".$jurusan_td.">".$jurusan."</td>";
+                  echo "<td".$suplier_td.">".$suplier."</td>";
+                  echo "<td".$kategori_td.">".$kategori."</td>";
+                  echo "<td".$satuan_td.">".$satuan."</td>";
+                  echo "<td".$harga_beli_td.">".$harga_beli."</td>";
+                  echo "<td".$harga_jual_td.">".$harga_jual."</td>";
+                  echo "<td".$stok_td.">".$stok."</td>";
                   echo "</tr>";
                 }
 
-                $numrow++; // Tambah 1 setiap kali looping
+                $numrow++;
               }
 
               echo "</table>";

@@ -43,7 +43,7 @@ if (isset($_GET['status'])) {
 
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Pengatuan</h6>
+    <h6 class="m-0 font-weight-bold text-primary">Pengaturan</h6>
   </div>
 <div class="card-body">
   <h5 align="center"><b>Pengaturan Toko</b></h5><hr>

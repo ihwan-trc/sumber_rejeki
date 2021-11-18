@@ -196,10 +196,7 @@ if (isset($_GET['status'])) {
         </button>
       </div>
       <div class="modal-body">
-
-           <div class="hasil-data"></div>
-
-
+        <div class="hasil-data"></div>
       </div>
     </div>
   </div>
