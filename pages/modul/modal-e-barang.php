@@ -1,6 +1,5 @@
 <?php
     include "../../config.php";
-    // $level = $_SESSION['username'];
 
 session_start();
 $level = $_SESSION['level'];
