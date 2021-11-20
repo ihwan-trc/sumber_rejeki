@@ -15,8 +15,8 @@
   include 'pages/modul/terbilang.php';
   include 'pages/modul/tgl_indo.php';
   $query = $connect->query("SELECT * FROM data_toko");
-    while ($data = mysqli_fetch_assoc($query)) {
-      $nama_toko = $data['nama'];
+    while ($data=$query->fetch_object()) {
+      $nama_toko = $data->nama;
     }
 ?>
 
@@ -354,7 +354,7 @@
                 <img class="img-profile rounded-circle" src="img/<?= $img ?>">
               </a>
               <!-- Dropdown - User Information -->
-              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+              <div class="dropdown-menu dropdown-menu-right shadow animated-grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
@@ -372,11 +372,18 @@
         <?php 
           $getpage = $_GET['p'];
 
-          if ($getpage == 'barang'){
+          if ($getpage == 'dashboard') {
+              include 'pages/view/beranda.php';
+
+          // master data
+          }elseif ($getpage == 'barang'){
               include 'pages/view/data-barang.php';
 
           }elseif ($getpage == 'suplier') {
               include 'pages/view/data-suplier.php';
+
+          }elseif ($getpage == 'satuan') {
+              include 'pages/view/data-satuan.php';
 
           }elseif ($getpage == 'kategori') {
               include 'pages/view/data-kategori.php';
@@ -384,33 +391,42 @@
           }elseif ($getpage == 'importbarang') {
               include 'pages/view/importbarang.php';
           
-          }elseif ($getpage == 'satuan') {
-              include 'pages/view/data-satuan.php';
-          
+          // transaksi
+          // penjualan
           }elseif ($getpage == 'penjualan') {
               include 'pages/view/data-penjualan.php';
-          
-          }elseif ($getpage == 'pembelian') {
-              include 'pages/view/data-pembelian.php';
-          
-          }elseif ($getpage == 'stok-opname') {
-              include 'pages/view/stok-opname.php';
+
+          }elseif ($getpage == 'detail-penjualan') {
+              include 'pages/view/detail-penjualan.php';
+
+          }elseif ($getpage == 'form-edit-penjualan') {
+              include 'pages/view/form-edit-penjualan.php';
 
           }elseif ($getpage == 'form-penjualan') {
               include 'pages/view/form-penjualan.php';
-          
+
+          // pembelian
+          }elseif ($getpage == 'pembelian') {
+              include 'pages/view/data-pembelian.php';
+
+          }elseif ($getpage == 'detail-pembelian') {
+              include 'pages/view/detail-pembelian.php';
+
+          }elseif ($getpage == 'form-edit-pembelian') {
+              include 'pages/view/form-edit-pembelian.php';
+
           }elseif ($getpage == 'form-pembelian') {
               include 'pages/view/form-pembelian.php';
-          
+
+          // ==============================================
+          }elseif ($getpage == 'stok-opname') {
+              include 'pages/view/stok-opname.php';
+
           }elseif ($getpage == 'expire') {
               include 'pages/view/data-expire.php';
-          
-          }elseif ($getpage == 'dashboard') {
-              include 'pages/view/beranda.php';
-          
-          }elseif ($getpage == 'pengaturan') {
-              include 'pages/view/pengaturan.php';
+          // ==============================================
 
+          // laporan
           }elseif ($getpage == 'report') {
               include 'pages/view/laporan.php';
           
@@ -420,40 +436,34 @@
           }elseif ($getpage == 'report-penjualan') {
               include 'pages/report/penjualan.php';
 
+          }elseif ($getpage == 'report-stok-barang') {
+              include 'pages/report/stok-barang.php';
+
+          }elseif ($getpage == 'report-statistik-penjualan') {
+              include 'pages/report/statistik-penjualan.php';
+
           }elseif ($getpage == 'report-hutangbeli') {
               include 'pages/report/hutangbeli.php';
 
           }elseif ($getpage == 'report-hutangjual') {
               include 'pages/report/hutangjual.php';
 
-          }elseif ($getpage == 'report-statistik-penjualan') {
-              include 'pages/report/statistik-penjualan.php';
 
-          }elseif ($getpage == 'report-stok-barang') {
-              include 'pages/report/stok-barang.php';
+          // setting
+          }elseif ($getpage == 'pengaturan') {
+              include 'pages/view/pengaturan.php';
 
           }elseif ($getpage == 'user') {
               include 'pages/view/user.php';
 
-          }elseif ($getpage == 'detail-penjualan') {
-              include 'pages/view/detail-penjualan.php';
-
-          }elseif ($getpage == 'detail-pembelian') {
-              include 'pages/view/detail-pembelian.php';
-
-          }elseif ($getpage == 'form-edit-pembelian') {
-              include 'pages/view/form-edit-pembelian.php';
-
-          }elseif ($getpage == 'form-edit-penjualan') {
-              include 'pages/view/form-edit-penjualan.php';
-
+          // petunjuk
           }elseif ($getpage == 'petunjuk') {
               include 'pages/view/petunjuk.php';
 
-          }else 
-              include '404.php'
-          
-          ?>
+          }else {
+            include '404.php';
+          }   
+        ?>
         </div>
         <!-- /.container-fluid -->
       </div>
